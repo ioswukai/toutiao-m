@@ -6,7 +6,10 @@
       class="page-nav-bar"
     >
       <template #left>
-        <van-icon name="cross"/>
+        <van-icon
+          name="cross"
+          @click="$router.back()"
+        />
       </template>
     </van-nav-bar>
     <!-- 导航栏 -->
@@ -85,10 +88,10 @@ export default {
   data () {
     return {
       user: {
-        // mobile: '13911111111',
-        // code: '246810'
-        mobile: '',
-        code: ''
+        mobile: '13911111111',
+        code: '246810'
+        // mobile: '',
+        // code: ''
       },
       userFormRules: {
         mobile: [{
