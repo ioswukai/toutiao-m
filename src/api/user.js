@@ -11,3 +11,14 @@ export const login = data => {
     data
   })
 }
+
+/**
+ * 发送验证码
+ * 每个手机每分钟只能发送1次
+ */
+export const sendSms = mobile => {
+  return request({
+    method: 'GET',
+    url: `/app/v1_0/sms/codes/${mobile}`
+  })
+}

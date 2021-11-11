@@ -17,9 +17,10 @@
           2. 当表单提交的时候，会自动触发表单验证
              如果验证通过，会触发 submit 事件
              如果验证失败，不会触发 submit事件-->
-    <van-form @submit="onSubmit">
+    <van-form ref="loginForm" @submit="onSubmit">
       <!--CellGroup 为cell提供上下边框 -->
       <van-cell-group>
+      <!--   监听:rules ，获取校验规则数组    -->
       <van-field
           v-model="user.mobile"
           name="mobile"
@@ -44,7 +45,23 @@
             <i class="toutiao toutiao-yanzhengma"/>
           </template>
           <template #button>
-            <van-button class="send-sms-btn" round size="small" type="default">发送验证码</van-button>
+            <!--倒计时 time时间单位是毫秒 format格式 finish倒计时结束监听-->
+            <van-count-down
+              @finish="isCountDownShow = false"
+              v-if="isCountDownShow"
+              :time="1000 * 60"
+              format="ss s"
+            />
+            <!-- native-type="button" 防止click触发表单校验 -->
+            <van-button
+              v-else
+              class="send-sms-btn"
+              native-type="button"
+              round
+              size="small"
+              type="default"
+              @click="onSendSms"
+            >发送验证码</van-button>
           </template>
         </van-field>
       </van-cell-group>
@@ -59,7 +76,8 @@
 </template>
 
 <script>
-import { login } from '@/api/user'
+import { login, sendSms } from '@/api/user'
+
 export default {
   name: 'LoginIndex',
   components: {},
@@ -67,8 +85,10 @@ export default {
   data () {
     return {
       user: {
-        mobile: '13911111111',
-        code: '246810'
+        // mobile: '13911111111',
+        // code: '246810'
+        mobile: '',
+        code: ''
       },
       userFormRules: {
         mobile: [{
@@ -88,7 +108,8 @@ export default {
           pattern: /^\d{6}$/,
           message: '验证码格式错误'
         }]
-      }
+      },
+      isCountDownShow: false // 是否展示倒计时
     }
   },
   computed: {},
@@ -101,7 +122,7 @@ export default {
     async onSubmit () {
       // 1. 获取表达数据
       const user = this.user
-      // 2. 表单验证
+      // 2. 表单验证 通过rules组件自行校验
       // 3. 提交表单，请求登录
       this.$toast.loading({
         message: '登录中...',
@@ -112,8 +133,10 @@ export default {
         duration: 0
       })
       try {
-        const res = await login(user)
-        console.log('登录成功', res)
+        // 结构服务器返回的值
+        const { data } = await login(user)
+        // 向Vuex提交user的修改
+        this.$store.commit('setUser', data.data)
         this.$toast.success('登录成功')
       } catch (err) {
         if (err.response.status === 400) {
@@ -123,6 +146,36 @@ export default {
         }
       }
       // 4. 接收请求结果，后续处理
+    },
+    async onSendSms () {
+      // 1. 校验手机号
+      try {
+        // validate支持传入名字，返回promise
+        await this.$refs.loginForm.validate('mobile')
+      } catch (err) {
+        // 不想将后续逻辑嵌套到 上面的try代码块中
+        // 失败后return，代码块外接着执行后续逻辑
+        return console.log('验证失败', err)
+        // 直接返回return不容许
+        // return
+      }
+      // 2. 验证通过，显示倒计时
+      this.isCountDownShow = true
+      // 3. 请求发送验证码
+      try {
+        const res = await sendSms(this.user.mobile)
+        this.$toast('发送成功')
+        console.log('发送成功', res)
+      } catch (err) {
+        if (err.response.status === 429) {
+          this.$toast('发送太频繁了，请稍后重试')
+        } else {
+          this.$toast('发送失败，请稍后重试')
+        }
+        console.log('验证失败', err)
+      }
+      // 发送完成后，关闭倒计时
+      this.isCountDownShow = false
     }
   }
 }
