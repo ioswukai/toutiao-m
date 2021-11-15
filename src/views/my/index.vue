@@ -78,6 +78,7 @@
 
     <!-- 小智 -->
     <van-cell-group class="cell-wrap" :border="false">
+      <van-cell title="消息通知" is-link />
       <van-cell title="小智同学" is-link />
     </van-cell-group>
     <!-- 小智 -->
