@@ -1,13 +1,5 @@
 <template>
   <div class="my-container">
-    <!-- 未登录header -->
-    <div class="header not-login">
-      <div class="login-btn" @click="$router.push('/login')">
-        <img class="mobile-img" src="~@/assets/mobile.png">
-        <span class="text">登录/注册</span>
-      </div>
-    </div>
-    <!-- 未登录header -->
 
     <!-- 已登录header -->
     <div class="header user-info">
@@ -47,6 +39,15 @@
     </div>
     <!-- 已登录header -->
 
+    <!-- 未登录header -->
+    <div class="header not-login">
+      <div class="login-btn" @click="$router.push('/login')">
+        <img class="mobile-img" src="~@/assets/mobile.png">
+        <span class="text">登录/注册</span>
+      </div>
+    </div>
+    <!-- 未登录header -->
+
     <!--
     宫格导航
     :column-num 绑定属性为2
@@ -74,10 +75,29 @@
       </van-grid-item>
     </van-grid>
     <!--宫格导航-->
+
+    <!-- 小智 -->
+    <van-cell-group class="cell-wrap" :border="false">
+      <van-cell title="小智同学" is-link />
+    </van-cell-group>
+    <!-- 小智 -->
+
+    <!-- 退出登录 -->
+    <van-cell-group class="cell-wrap logout-btn-wrap" :border="false" >
+      <van-cell
+        class="logout-btn"
+        title="退出登录"
+        clickable
+      />
+    </van-cell-group>
+    <!-- 退出登录 -->
   </div>
 </template>
 
 <script>
+// 映射容器中的数据到组件
+import { mapState } from 'vuex'
+
 export default {
   name: 'MyIndex',
   components: {},
@@ -85,7 +105,10 @@ export default {
   data () {
     return {}
   },
-  computed: {},
+  computed: {
+    // 映射容器中的数据到组件
+    ...mapState(['user'])
+  },
   watch: {},
   created () {
   },
@@ -182,7 +205,7 @@ export default {
   }
 
   .grid-nav {
-    /deep/ .grid-item {
+    .grid-item {
       height: 141px;
       // 根据标签名i  和class类名toutiao 设置样式
       i.toutiao {
@@ -197,9 +220,19 @@ export default {
       }
       span.text {
         font-size: 28px;
+        margin-top: 6px;
       }
     }
   }
 
+  .logout-btn-wrap {
+    .logout-btn {
+      text-align: center;
+    }
+  }
+
+  .cell-wrap {
+    margin-top: 20px;
+  }
 }
 </style>
