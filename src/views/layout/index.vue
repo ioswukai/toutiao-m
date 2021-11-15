@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="layout-container">
     <!-- 路由的出口 -->
     <router-view/>
     <!-- 标签栏
@@ -54,7 +54,7 @@ export default {
 </script>
 
 <style scoped lang="less">
-.container {
+.layout-container {
   .layout-tab {
     // 根据 标签名+class类名 toutiao，设置样式
     i.toutiao {

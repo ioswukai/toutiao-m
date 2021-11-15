@@ -1,12 +1,15 @@
 <template>
-  <div class="container">
+  <div class="my-container">
+    <!-- 未登录header -->
     <div class="header not-login">
       <div class="login-btn" @click="$router.push('/login')">
         <img class="mobile-img" src="~@/assets/mobile.png">
         <span class="text">登录/注册</span>
       </div>
     </div>
+    <!-- 未登录header -->
 
+    <!-- 已登录header -->
     <div class="header user-info">
       <div class="base-info">
         <div class="left">
@@ -42,6 +45,35 @@
         </div>
       </div>
     </div>
+    <!-- 已登录header -->
+
+    <!--
+    宫格导航
+    :column-num 绑定属性为2
+    clickable 开启点击反馈
+    -->
+    <van-grid class="grid-nav"
+      :column-num="2"
+      clickable
+    >
+      <van-grid-item class="grid-item" >
+        <template #icon>
+          <i class="toutiao toutiao-shoucang"></i>
+        </template>
+        <template #text>
+          <span class="text">收藏</span>
+        </template>
+      </van-grid-item>
+      <van-grid-item class="grid-item" >
+        <template #icon>
+          <i class="toutiao toutiao-lishi"></i>
+        </template>
+        <template #text>
+          <span class="text">历史</span>
+        </template>
+      </van-grid-item>
+    </van-grid>
+    <!--宫格导航-->
   </div>
 </template>
 
@@ -64,7 +96,7 @@ export default {
 </script>
 
 <style scoped lang="less">
-.container {
+.my-container {
   .header {
     height: 361px;
     // 加载图片
@@ -93,6 +125,7 @@ export default {
       }
     }
   }
+
   .user-info {
     .base-info {
       height: 231px;
@@ -147,5 +180,26 @@ export default {
       }
     }
   }
+
+  .grid-nav {
+    /deep/ .grid-item {
+      height: 141px;
+      // 根据标签名i  和class类名toutiao 设置样式
+      i.toutiao {
+        font-size: 45px;
+      }
+      // 根据class实例 设置样式
+      .toutiao-shoucang {
+        color: #eb5253
+      }
+      .toutiao-lishi {
+        color: #ff9d1d
+      }
+      span.text {
+        font-size: 28px;
+      }
+    }
+  }
+
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="login-container">
     <!-- 导航栏 -->
     <van-nav-bar
       title="登录"
@@ -185,7 +185,7 @@ export default {
 </script>
 
 <style scoped lang="less">
-.container {
+.login-container {
   // 根据class类名toutiao，设置样式
   .toutiao {
     font-size: 37px;
