@@ -2,17 +2,17 @@
   <div class="my-container">
 
     <!-- 已登录header -->
-    <div class="header user-info">
+    <div v-if="user" class="header user-info">
       <div class="base-info">
         <div class="left">
-          <!--fit 设置图片的填充-->
+          <!--fit 设置图片的填充 :src绑定图片资源-->
           <van-image
             class="avater"
-            src="https://img.yzcdn.cn/vant/cat.jpeg"
+            :src="userInfo.photo"
             round
             fit="cover"
           />
-          <span class="name">黑马头条号</span>
+          <span class="name">{{ userInfo.name }}</span>
         </div>
         <div class="right">
           <van-button size="mini" round>编辑资料</van-button>
@@ -20,19 +20,19 @@
       </div>
       <div class="data-stats">
         <div class="data-item">
-          <span class="count">10</span>
+          <span class="count">{{ userInfo.art_count }}</span>
           <span class="text">头条</span>
         </div>
         <div class="data-item">
-          <span class="count">10</span>
+          <span class="count">{{ userInfo.follow_count }}</span>
           <span class="text">关注</span>
         </div>
         <div class="data-item">
-          <span class="count">10</span>
+          <span class="count">{{ userInfo.fans_count }}</span>
           <span class="text">粉丝</span>
         </div>
         <div class="data-item">
-          <span class="count">10</span>
+          <span class="count">{{ userInfo.like_count }}</span>
           <span class="text">获赞</span>
         </div>
       </div>
@@ -40,7 +40,7 @@
     <!-- 已登录header -->
 
     <!-- 未登录header -->
-    <div class="header not-login">
+    <div v-else class="header not-login">
       <div class="login-btn" @click="$router.push('/login')">
         <img class="mobile-img" src="~@/assets/mobile.png">
         <span class="text">登录/注册</span>
@@ -84,11 +84,12 @@
     <!-- 小智 -->
 
     <!-- 退出登录 -->
-    <van-cell-group class="cell-wrap logout-btn-wrap" :border="false" >
+    <van-cell-group v-if="user" class="cell-wrap logout-btn-wrap" :border="false" >
       <van-cell
         class="logout-btn"
         title="退出登录"
         clickable
+        @click="onLogout"
       />
     </van-cell-group>
     <!-- 退出登录 -->
@@ -98,13 +99,16 @@
 <script>
 // 映射容器中的数据到组件
 import { mapState } from 'vuex'
+import { getUserInfo } from '@/api/user'
 
 export default {
   name: 'MyIndex',
   components: {},
   props: {},
   data () {
-    return {}
+    return {
+      userInfo: {} // 用户信息
+    }
   },
   computed: {
     // 映射容器中的数据到组件
@@ -112,10 +116,37 @@ export default {
   },
   watch: {},
   created () {
+    // 如果用户登录了，则请求加载用户信息
+    if (this.user) {
+      this.loadUserInfo()
+    }
   },
   mounted () {
   },
-  methods: {}
+  methods: {
+    // Dialog 组件既可以在模板中使用
+    // 也可以通过 JavaScript 来调用
+    // 模板中使用 van-dialog
+    // JavaScript 调用：this.$dialog
+    onLogout () {
+      this.$dialog.confirm({
+        title: '退户确认',
+        message: '退出当前头条账号，将不能同步收藏，发布评论和云端分享等'
+      }).then(() => {
+        // 清空vuex中的user，local中会自动同步删除
+        this.$store.commit('setUser', null)
+      })
+    },
+
+    async loadUserInfo () {
+      try {
+        const { data } = await getUserInfo()
+        this.userInfo = data.data
+      } catch (e) {
+        this.$toast('获取数据失败，请稍后重试')
+      }
+    }
+  }
 }
 </script>
 
@@ -229,6 +260,9 @@ export default {
   .logout-btn-wrap {
     .logout-btn {
       text-align: center;
+    }
+    .van-cell {
+      color: #eb5253;
     }
   }
 

@@ -26,7 +26,7 @@
         </template>
       </van-tabbar-item>
       <van-tabbar-item icon="setting-o" to="/my" >
-        <span class="text">我的</span>
+        <span class="text">{{ $store.state.user ? '我的' : '未登录' }}</span>
         <template #icon>
           <i class="toutiao toutiao-wode"/>
         </template>

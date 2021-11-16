@@ -141,6 +141,9 @@ export default {
         // 向Vuex提交user的修改
         this.$store.commit('setUser', data.data)
         this.$toast.success('登录成功')
+        // 登录成功后，跳转原来的页面
+        // back不严谨，后期会优化
+        this.$router.back()
       } catch (err) {
         if (err.response.status === 400) {
           this.$toast.fail('手机号或验证码错误')
