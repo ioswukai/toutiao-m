@@ -149,5 +149,14 @@ export default {
 
 <style scoped lang="less">
 .article-list {
+  // 受父元素的影响，如果父元素没有设置height，
+  // 则子元素，高度为0
+  // height: 100%;
+  // css3中新增 视口单位`vw`和`vh`,
+  // 就是浏览器窗口大小的单位，它不受父元素的影响
+  // 1vw/1vh=可视窗口宽度/高度的1%，比如窗口宽750/高667，
+  // 则1vw=7.5px/1vh=6.67px；
+  height: 79vh;
+  overflow-y: auto;
 }
 </style>
