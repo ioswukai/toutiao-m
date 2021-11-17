@@ -29,14 +29,11 @@
       v-model:active="active"
       animated
       swipeable>
-      <van-tab title="标签 1">内容 1</van-tab>
-      <van-tab title="标签 2">内容 2</van-tab>
-      <van-tab title="标签 3">内容 3</van-tab>
-      <van-tab title="标签 4">内容 4</van-tab>
-      <van-tab title="标签 1">内容 1</van-tab>
-      <van-tab title="标签 2">内容 2</van-tab>
-      <van-tab title="标签 3">内容 3</van-tab>
-      <van-tab title="标签 4">内容 4</van-tab>
+      <van-tab
+        v-for="channel in channels"
+        :key="channel.id"
+        :title="channel.name"
+      >{{ channel.name }}的内容</van-tab>
 
       <!-- 汉堡按钮 -->
       <template #nav-right>
@@ -56,22 +53,37 @@
 </template>
 
 <script>
+import { getUserChannels } from '@/api/user'
+
 export default {
   name: 'HomeIndex',
   components: {},
-  props: {},
+  props: {
+  },
   data () {
     return {
-      active: 2
+      // 当前显示的tab索引
+      active: 0,
+      channels: [] // 频道列表
     }
   },
   computed: {},
   watch: {},
   created () {
+    this.loadUserChannels()
   },
   mounted () {
   },
-  methods: {}
+  methods: {
+    async loadUserChannels () {
+      try {
+        const { data } = await getUserChannels()
+        this.channels = data.data.channels
+      } catch (e) {
+        this.$toast('获取频道数据失败')
+      }
+    }
+  }
 }
 </script>
 
