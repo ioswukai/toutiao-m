@@ -1,8 +1,8 @@
 <template>
   <div class="home-container">
 
-    <!--导航栏-->
-    <van-nav-bar class="page-nav-bar">
+    <!--导航栏 本身有个flex属性，实现固定定位-->
+    <van-nav-bar class="page-nav-bar" fixed >
       <template #left>
         <div class="logo"></div>
       </template>
@@ -98,8 +98,10 @@ export default {
 .home-container {
   // 让tabbar不遮挡 home的内容
   padding-bottom: 100px;
+  // 让nav和tab页的tab栏 不遮挡 home的内容
+  padding-top: 174px;
 
-  .page-nav-bar {
+ .page-nav-bar {
     background-color: #3196fa;
     .logo {
       background: url("~@/assets/logo.png") no-repeat;
@@ -134,6 +136,12 @@ export default {
     .van-tabs__wrap {
       // 设置tab的父组件高
       height: 82px;
+      // 设置tab为固定定位
+      position: fixed;
+      top: 92px;
+      z-index: 1;
+      left: 0;
+      right: 0;
     }
     .van-tab {
       // tab标签 自带底边框，无需设置底边框
