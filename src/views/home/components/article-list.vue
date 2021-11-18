@@ -5,7 +5,7 @@
       v-model="isRefreshLoading"
       @refresh="onRefresh"
       :success-text="refreshSuccessText"
-      :success-duration="1500"
+      :success-duration="800"
     >
       <!--文章列表-->
       <van-list
