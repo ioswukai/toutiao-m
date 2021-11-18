@@ -35,7 +35,12 @@
         :title="channel.name"
       >
         <!--文章列表-->
-        <ArticleList :channel="channel" />
+        <!--
+            ArticleListNew 使用了 common-page-list，封装了van-list
+            而ArticleList 直接使用 van-list
+        -->
+        <!-- ArticleList <ArticleList :channel="channel" />-->
+        <ArticleListNew :channel="channel" />
         <!--文章列表-->
       </van-tab>
 
@@ -58,12 +63,13 @@
 
 <script>
 import { getUserChannels } from '@/api/user'
-import ArticleList from './components/article-list.vue'
-
+// import ArticleList from './components/article-list.vue'
+import ArticleListNew from './components/article-list-new.vue'
 export default {
   name: 'HomeIndex',
   components: {
-    ArticleList
+    // ArticleList
+    ArticleListNew
   },
   props: {
   },
