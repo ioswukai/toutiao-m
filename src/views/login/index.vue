@@ -143,7 +143,10 @@ export default {
         this.$toast.success('登录成功')
         // 登录成功后，跳转原来的页面
         // back不严谨，后期会优化
-        this.$router.back()
+        // this.$router.back()
+        // 跳转到首页
+        const redirect = this.$route.query.redirect || '/'
+        this.$router.replace(redirect)
       } catch (err) {
         if (err.response.status === 400) {
           this.$toast.fail('手机号或验证码错误')
