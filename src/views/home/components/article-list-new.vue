@@ -4,7 +4,7 @@
     v-model="list"
     :load-data-request="onLoad"
     @reset-current-page="currentPage=''"
-    @update-current-page="updateCurrentPage"
+    @increase-current-page="currentPage=networkData.pre_timestamp"
     height="79vh" >
 
     <article-item
@@ -48,9 +48,6 @@ export default {
   mounted () {
   },
   methods: {
-    updateCurrentPage () {
-      this.currentPage = this.networkData.pre_timestamp
-    },
     async onLoad () {
       // 1. 请求获取数据
       const { data } = await getArticles({

@@ -61,12 +61,10 @@ export default {
      */
     resetCurrentPage: null,
     /**
-     * 通知父组件，用请求的网络数据，重新设置CurrentPage的值
-     * 会将 网络请求的数据，作为参数传递给父组件
-     *
+     * 通知父组件，递增CurrentPage的值
      * 发送通知的场景是：本次请求结束，且请求结果的长度大于0
      */
-    updateCurrentPage: null,
+    increaseCurrentPage: null,
     /**
      * 供v-model使用
      */
@@ -124,7 +122,7 @@ export default {
           // 更新父组件的数据源
           this.$emit('onUpdate:modelValue', list)
           // 更新父组件的CurrentPage
-          this.$emit('updateCurrentPage')
+          this.$emit('increaseCurrentPage')
         } else {
           // 3. 判断数据是否全部加载完成，
           // 如果没有数据了，把finished设置为true，之后
