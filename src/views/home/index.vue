@@ -115,10 +115,10 @@ export default {
       width: 200px;
       height: 60px;
     }
-    /deep/ .van-nav-bar__title {
+    :deep(.van-nav-bar__title) {
       max-width: unset;
     }
-    /deep/ .search-btn {
+   :deep(.search-btn) {
       width: 330px;
       height: 64px;
       background-color: #5babfb;
@@ -138,7 +138,7 @@ export default {
     }
   }
 
-  /deep/ .channel-tabs {
+  :deep(.channel-tabs) {
     .van-tabs__wrap {
       // 设置tab的父组件高
       height: 82px;
@@ -148,6 +148,7 @@ export default {
       z-index: 1;
       left: 0;
       right: 0;
+      border-bottom: 1px solid #edeff5;
     }
     .van-tab {
       // tab标签 自带底边框，无需设置底边框
