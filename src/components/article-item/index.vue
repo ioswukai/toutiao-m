@@ -24,7 +24,7 @@
       <div class="label-info-wrap">
         <span>{{article.aut_name}}</span>
         <span>{{article.comm_count}}评论</span>
-        <span>{{article.pubdate}}</span>
+        <span>{{ $filters.relativeTime(article.pubdate) }}</span>
       </div>
     </template>
     <!-- 条件渲染插槽，而非v-image -->
