@@ -35,10 +35,11 @@ export default {
   props: {
     /**
      * list需要有自己的滚动容器 需设置 height
+     * 默认 50vh
      */
     height: {
       type: String,
-      required: true
+      default: '50vh'
     },
     /**
      * 请求网络数据的方法
@@ -49,10 +50,13 @@ export default {
     },
     /**
      * 列表的数据源数组
+     * 默认值 空数组，[]
      */
     modelValue: {
       type: Array,
-      required: true
+      default: () => {
+        return []
+      }
     }
   },
   emits: {
