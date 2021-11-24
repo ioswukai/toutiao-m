@@ -75,6 +75,11 @@ request.interceptors.response.use(
 
       // 如果有refresh_token，则请求获取新的 token
       try {
+        /**
+         * 获取token需新建axios实例
+         * 若还用原来request实例，仍会启动响应拦截器，这样如果
+         * 刷新token请求也报错401，就会导致无限递归，即死循环了
+         */
         const res = await axios({
           method: 'PUT',
           url: 'http://api-toutiao-web.itheima.net/app/v1_0/authorizations',
@@ -83,16 +88,27 @@ request.interceptors.response.use(
           }
         })
 
-        // 如果获取成功，则把新的 token 更新到容器中
-        // 因为没有返回用户其他信息，所以...user使用原来的信息即可
+        /**
+         * 如果获取成功，则把新的 token 更新到容器中
+         * 因为没有返回用户其他信息，所以...user使用原来的信息即可
+         */
         store.commit('setUser', {
           ...user,
           token: res.data.data.token // 覆盖设置为 最新获取的可用 token
         })
 
-        // 把之前失败的用户请求 继续发出去 ！！！
-        // config 是一个对象，其中包含本次失败请求相关的那些配置信息，例如 url、method 都有
-        // return 把 request 的请求结果继续返回给发请求的具体位置
+        /**
+         * 把之前失败的用户请求 继续发出去 ！！！
+         * request响应返回的 data或error对象，
+         * 会包含请求所有的信息例如 url、method 都有，
+         * 他们都在data.config或error.config对象中
+         *
+         * request(error.config) 就新建了一个请求，
+         * 来替代原来发送的请求
+         *
+         * return 把新request的请求结果，
+         * 继续返回给原请求的发送对象
+         */
         return request(error.config)
       } catch (err) {
         // 如果获取最新token失败，直接跳转 登录页
@@ -100,7 +116,7 @@ request.interceptors.response.use(
         // router.push('/login')
         redirectLogin()
       }
-    } else if (error.response.status === 500) {
+    } else {
       // 统一处理 其他错误请求的交互
       Notify('服务端异常，请稍后重试')
     }
@@ -110,9 +126,26 @@ request.interceptors.response.use(
 )
 
 function redirectLogin () {
-  router.push({
+  /**
+   * replace替换当前页面，效果同`router.push()`，但它不会形成历史记录，无法返回
+   *
+   * 对于登录页面，我们并不希望用户能够回退返回
+   */
+  router.replace({
     name: 'login',
+    /**
+     * 是一个对象类型，可用于在当前路由跳转前，记录当前路由
+     * 的路径`router.currentRoute.fullPath`，
+     * 方便后续`router.push()`返回时跳转到当前路由，
+     *
+     * query对象里面的`key`属性随便写，只要不重复就行；
+     */
     query: {
+      /**
+       * redirect 自定义的 用于记录当前路径的key
+       * 后续使用this.$router.query.redirect
+       * 可以拿到此处记录的路由路径
+       */
       redirect: router.currentRoute.fullPath
     }
   })
