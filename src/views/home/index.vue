@@ -51,25 +51,49 @@
         添加站位div
         -->
         <div class="placeholder"></div>
-        <div class="hamburger-btn">
+        <div class="hamburger-btn" @click="isChannelEditShow = true">
           <i class="toutiao toutiao-gengduo"/>
         </div>
       </template>
       <!-- 汉堡按钮 -->
     </van-tabs>
     <!--频道列表 tab标签页-->
+
+    <!-- 频道编辑 -->
+    <!--
+        position="bottom" 底部弹出
+        closeable 显示关闭图标
+        close-icon-position="top-left" 默认是top-right 我们需在左边
+        :style="{ height: '100%' }" 弹屏的高度 全屏显示
+     -->
+    <van-popup
+      v-model:show="isChannelEditShow"
+      closeable
+      close-icon-position="top-left"
+      position="bottom"
+      :style="{ height: '100%' }"
+    >
+      <channel-edit
+        :my-channels="channels"
+        v-model="active"
+      />
+    </van-popup>
+    <!-- 频道编辑 -->
   </div>
 </template>
 
 <script>
 import { getUserChannels } from '@/api/user'
-// import ArticleList from './components/article-list.vue'
-import ArticleListNew from './components/article-list-new.vue'
+// import ArticleList from './components/article-list'
+import ArticleListNew from './components/article-list-new'
+import ChannelEdit from './components/channel-edit'
+
 export default {
   name: 'HomeIndex',
   components: {
     // ArticleList
-    ArticleListNew
+    ArticleListNew,
+    ChannelEdit
   },
   props: {
   },
@@ -77,7 +101,8 @@ export default {
     return {
       // 当前显示的tab索引
       active: 0,
-      channels: [] // 频道列表
+      channels: [], // 频道列表
+      isChannelEditShow: false // 控制popup弹层
     }
   },
   computed: {},
