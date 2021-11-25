@@ -12,10 +12,12 @@ import jsonBig from 'json-bigint'
 import { Notify } from 'vant'
 // 导入router 用于跳转登录
 import router from '@/router'
+import globalConfig from '@/globalConfig'
 
 // axios.create 复制一个 axios实例
 const request = axios.create({
-  baseURL: 'http://api-toutiao-web.itheima.net/' // 基础路径
+  // baseURL: 'http://api-toutiao-web.itheima.net/' // 基础路径
+  baseURL: globalConfig.network.host // 基础路径
 })
 
 // 请求拦截器 这里axios 需要换成request
