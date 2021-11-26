@@ -12,6 +12,7 @@ import { handleRelativeTime } from './utils/dayjs'
 // vue2中，导入relativeTime 过滤器
 // import './utils/dayjs'
 import globalConfig from '@/globalConfig'
+import lodash from 'lodash'
 
 const app = createApp(App)
 
@@ -22,5 +23,6 @@ app.config.globalProperties.$filters = {
   }
 }
 app.config.globalProperties.globalConfig = globalConfig
+app.config.globalProperties.lodash = lodash
 
 app.use(store).use(router).use(Vant).mount('#app')

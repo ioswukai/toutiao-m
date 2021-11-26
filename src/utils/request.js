@@ -166,7 +166,11 @@ function redirectLogin () {
  * @return {Promise} request()
  * 调用axios创建的request实例发请求
  **/
-export function sendRequest (url, isParamsInBody = true, params = {}, method = 'GET') {
+export function sendRequest (
+  url,
+  isParamsInBody = true,
+  params = {},
+  method = 'GET') {
   // 创建一个空对象
   const requestConfig = {}
   // 给对象赋值属性

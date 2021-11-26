@@ -17,7 +17,7 @@
           round
           class="eidt-btn"
           @click="isEdit = !isEdit"
-        >编辑</van-button>
+        >{{isEdit ? '保存' : '编辑'}}</van-button>
       </template>
     </van-cell>
     <!--
@@ -28,7 +28,6 @@
         class="grid-item"
         v-for="(channel, index) in myChannels"
         :key="index"
-        icon="clear"
         @click="onChannelActiveOrDelete(channel, index)"
       >
         <template #text>
@@ -37,6 +36,9 @@
             class="van-grid-item__text"
             :class="{active: index === modelValue}"
           >{{ channel.name }}</span>
+        </template>
+        <template #icon v-if="isEdit">
+          <van-icon class="clear-icon" name="clear" />
         </template>
       </van-grid-item>
     </van-grid>
@@ -57,6 +59,7 @@
         :key="index"
         :text="channel.name"
         icon="plus"
+        @click="onChannelAdd(channel)"
       />
     </van-grid>
   </div>
@@ -64,12 +67,11 @@
 
 <script>
 import { getAllChannels } from '@/api/channel'
-
 export default {
   name: 'ChannelEdit',
   components: {},
   props: {
-    myChannels: {
+    channels: { // 我的推荐列表 不可更改
       type: Array,
       required: true
     },
@@ -78,18 +80,19 @@ export default {
       required: true
     }
   },
+  data () {
+    return {
+      isEdit: false,
+      myChannels: [], // 我的推荐列表 因为channels不可更改，所以新建属性
+      allChannels: [] // 所有的频道
+    }
+  },
   emits: {
     /**
      * 供v-model使用
      */
-    'onUpdate:modelValue': null,
+    'update:modelValue': null,
     close: null
-  },
-  data () {
-    return {
-      isEdit: false,
-      allChannels: [] // 所有的频道
-    }
   },
   computed: {
     // recommendChannels () {
@@ -119,24 +122,40 @@ export default {
   },
   watch: {},
   created () {
+    // 接收父组件传递的 channels
+    // 引用对象，直接赋值，子组件的修改，会影响父组件
+    // this.myChannels = this.channels
+    // 使用深拷贝赋值
+    this.myChannels = this.lodash.cloneDeep(this.channels)
+
+    // 请求所有频道
     this.loadAllChannels()
   },
   mounted () {
   },
   methods: {
-    onChannelActiveOrDelete (channel, index) {
-      console.log('onChannelActiveOrDelete')
-      if (this.isEdit) {
-      } else {
-        this.$emit('onUpdate:modelValue', index)
-      }
-    },
 
     async loadAllChannels () {
       const { data } = await getAllChannels()
       this.allChannels = data.data.channels
+    },
+
+    onChannelAdd (channel) {
+      // 直接往myChannels添加即可，计算属性自动处理推荐列表
+      this.myChannels.push(channel)
+    },
+
+    onChannelActiveOrDelete (channel, index) {
+      if (this.isEdit) {
+      } else {
+        // 更新 选中
+        this.$emit('update:modelValue', index)
+        // 关闭弹框
+        this.$emit('close')
+      }
     }
   }
+
 }
 </script>
 
@@ -180,10 +199,10 @@ export default {
   border: 1px solid #f85959;
 }
 
-:deep(.van-icon-clear)  {
+.clear-icon {
   position: absolute;
-  right: -10px;
-  top: -10px;
+  right: -97px;
+  top: -36px;
   font-size: 30px;
   color: #cacaca;
   z-index: 2;

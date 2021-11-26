@@ -76,7 +76,7 @@ export default {
     /**
      * 供v-model使用
      */
-    'onUpdate:modelValue': null
+    'update:modelValue': null
   },
   data () {
     return {
@@ -128,7 +128,7 @@ export default {
           // ...数组，数组的展开操作符，它会把数组元素一个一个的拿出来，传递给使用的位置
           list.push(...results)
           // 更新父组件的数据源
-          this.$emit('onUpdate:modelValue', list)
+          this.$emit('update:modelValue', list)
           // 更新父组件的CurrentPage
           this.$emit('increaseCurrentPage')
         } else {

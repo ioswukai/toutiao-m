@@ -73,9 +73,15 @@
       position="bottom"
       :style="{ height: '100%' }"
     >
+      <!--v-if="isChannelEditShow"
+      强制让channel-edit每次都更新
+      默认：只有第一次更新
+      -->
       <channel-edit
-        :my-channels="channels"
+        :channels="channels"
+        @close="isChannelEditShow = false"
         v-model="active"
+        v-if="isChannelEditShow"
       />
     </van-popup>
     <!-- 频道编辑 -->
