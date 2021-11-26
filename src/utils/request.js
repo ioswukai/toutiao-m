@@ -154,33 +154,26 @@ function redirectLogin () {
 }
 
 /**
- * @description 封装axios网络请求的功能函数
- * @param {String} url
- * 相对网址路径
- * @param {Boolean} isParamsInBody
- * 默认是true，表示需将参数放入Body中，false时：参数在query中
- * @param {Object} params
- * 参数合集的对象，默认是{}，
- * @param {String} method
- * 请求方法，默认是GET
- * @return {Promise} request()
- * 调用axios创建的request实例发请求
- **/
+ *
+ * @param url 网址
+ * @param method 请求方法
+ * @param params Query中的请求参数
+ * @param data Body中的请求参数
+ * @return {AxiosPromise} 发送实际的请求
+ */
 export function sendRequest (
   url,
-  isParamsInBody = true,
-  params = {},
-  method = 'GET') {
-  // 创建一个空对象
+  {
+    method = 'GET',
+    params = {},
+    data = {}
+  } = {}) {
+  // 请求的配置对象 赋值属性
   const requestConfig = {}
-  // 给对象赋值属性
   requestConfig.url = url
   requestConfig.method = method
-  if (isParamsInBody) {
-    requestConfig.data = params
-  } else {
-    requestConfig.params = params
-  }
+  requestConfig.data = data
+  requestConfig.params = params
 
   /** 发请求 request返回的是用一个Promise对象 所以可用await */
   return request(requestConfig)
