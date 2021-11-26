@@ -1,5 +1,9 @@
 /**
- * 对van-list进行封装，使其使用更方便
+ * 对van-list进行封装，使其使用更方便，
+ *
+ * !!! list需要有自己的滚动容器，所以需要父组件通过$attrs
+ * 给common-page-list组件 传递
+ * height样式，或能确定高度的其他样式组合
 */
 <template>
   <div class="common-page-list">
@@ -33,14 +37,14 @@ export default {
   name: 'CommonPageList',
   components: {},
   props: {
-    /**
-     * list需要有自己的滚动容器 需设置 height
-     * 默认 50vh
-     */
-    height: {
-      type: String,
-      default: '50vh'
-    },
+    // /**
+    //  * list需要有自己的滚动容器 需设置 height
+    //  * 默认 50vh  由父组件，通过$attrs传递更灵活
+    //  */
+    // height: {
+    //   type: String,
+    //   default: '50vh'
+    // },
     /**
      * 请求网络数据的方法
      */
@@ -174,8 +178,8 @@ export default {
    * 则1vw=7.5px/1vh=6.67px；
    */
 
-  // 在css中，通过v-bind使用js变量
-  height: v-bind(height);
+  // 在css中，通过v-bind使用js变量  由父组件，通过$attrs传递更灵活
+  //height: v-bind(height);
   overflow-y: auto;
 }
 </style>

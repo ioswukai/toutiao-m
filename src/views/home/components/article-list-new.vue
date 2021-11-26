@@ -5,7 +5,7 @@
     :load-data-request="onLoad"
     @reset-current-page="currentPage=''"
     @increase-current-page="currentPage=networkData.pre_timestamp"
-    height="79vh" >
+    class="common-page-list" >
 
     <article-item
       v-for="(article, index) in list"
@@ -68,5 +68,7 @@ export default {
 </script>
 
 <style scoped lang="less">
-
+.common-page-list {
+  height: 79vh;
+}
 </style>
