@@ -16,3 +16,10 @@ export const getAllChannels = params => {
 export const addUserChannel = data => {
   return sendRequest('/app/v1_0/user/channels', { data, method: 'PATCH' })
 }
+
+/**
+ * 删除用户频道
+ */
+export const deleteUserChannel = channelId => {
+  return sendRequest(`/app/v1_0/user/channels/${channelId}`, { method: 'DELETE' })
+}

@@ -26,7 +26,7 @@
     <van-grid class="my-grid" :gutter="10">
       <van-grid-item
         class="grid-item"
-        v-for="(channel, index) in myChannels"
+        v-for="(channel, index) in channels"
         :key="index"
         @click="onChannelActiveOrDelete(channel, index)"
       >
@@ -34,11 +34,13 @@
           <!--动态绑定 active的样式class-->
           <span
             class="van-grid-item__text"
-            :class="{active: index === modelValue}"
+            :class="{active: index === active}"
           >{{ channel.name }}</span>
         </template>
-        <template #icon v-if="isEdit">
-          <van-icon class="clear-icon" name="clear" />
+        <template #icon v-if="isEdit && !this.fixedChannels.includes(channel.id)">
+          <van-icon
+            class="clear-icon"
+            name="clear"/>
         </template>
       </van-grid-item>
     </van-grid>
@@ -66,7 +68,15 @@
 </template>
 
 <script>
-import { getAllChannels } from '@/api/channel'
+import {
+  getAllChannels,
+  addUserChannel,
+  deleteUserChannel
+} from '@/api/channel'
+import { setItem } from '@/utils/storage'
+import { mapState } from 'vuex'
+const MY_CHANNELS_KEY = 'TOUTIAO_MY_CHANNELS'
+
 export default {
   name: 'ChannelEdit',
   components: {},
@@ -75,7 +85,7 @@ export default {
       type: Array,
       required: true
     },
-    modelValue: {
+    active: {
       type: Number,
       required: true
     }
@@ -83,15 +93,16 @@ export default {
   data () {
     return {
       isEdit: false,
-      myChannels: [], // 我的推荐列表 因为channels不可更改，所以新建属性
-      allChannels: [] // 所有的频道
+      allChannels: [], // 所有的频道列表
+      fixedChannels: [0] // 固定频道列表，里面存的是频道的id 如0：推荐
     }
   },
   emits: {
     /**
      * 供v-model使用
      */
-    'update:modelValue': null,
+    'update:active': null,
+    'update:channels': null,
     close: null
   },
   computed: {
@@ -99,7 +110,7 @@ export default {
     //   const channels = []
     //   this.allChannels.forEach(channel => {
     //     // find 变量数组，找到满足条件的元素项
-    //     const ret = this.myChannels.find(mychannel => {
+    //     const ret = this.channels.find(mychannel => {
     //       return mychannel.id === channel.id
     //     })
     //     // 如果我的频道中不包含该频道，则收集到推荐频道中
@@ -114,20 +125,17 @@ export default {
       // 这是数组的filter方法，他会遍历数组，把符合条件的元存储在新数组中
       return this.allChannels.filter(channel => {
         // 数组的find方法，也是遍历数组，把符合条件的第一个元素返回，
-        return !this.myChannels.find(mychannel => {
+        return !this.channels.find(mychannel => {
           return mychannel.id === channel.id
         })
       })
-    }
+    },
+
+    // 映射容器中的数据到组件
+    ...mapState(['user'])
   },
   watch: {},
   created () {
-    // 接收父组件传递的 channels
-    // 引用对象，直接赋值，子组件的修改，会影响父组件
-    // this.myChannels = this.channels
-    // 使用深拷贝赋值
-    this.myChannels = this.lodash.cloneDeep(this.channels)
-
     // 请求所有频道
     this.loadAllChannels()
   },
@@ -140,22 +148,92 @@ export default {
       this.allChannels = data.data.channels
     },
 
-    onChannelAdd (channel) {
-      // 直接往myChannels添加即可，计算属性自动处理推荐列表
-      this.myChannels.push(channel)
+    async onChannelAdd (channel) {
+      try {
+        if (this.user) {
+          // 已登录，将数据存储到线上
+          await addUserChannel({
+            channels: [{
+              id: channel.id,
+              seq: this.channels.length
+            }]
+          })
+
+          // 更新视图 直接往channels添加即可，计算属性自动处理推荐列表
+          const myChannels = this.channels
+          myChannels.push(channel)
+          this.$emit('update:channels', myChannels)
+        } else {
+          // 更新视图 直接往channels添加即可，计算属性自动处理推荐列表
+          const myChannels = this.channels
+          myChannels.push(channel)
+          this.$emit('update:channels', myChannels)
+
+          // 未登录，将数据存储到本地
+          await this.$nextTick(() => {
+            setItem(MY_CHANNELS_KEY, this.channels)
+          })
+        }
+      } catch (e) {
+        this.$toast('添加频道失败')
+      }
     },
 
     onChannelActiveOrDelete (channel, index) {
       if (this.isEdit) {
+        // 删除
+        this.onChannelDelete(channel, index)
       } else {
-        // 更新 选中
-        this.$emit('update:modelValue', index)
         // 关闭弹框
         this.$emit('close')
+
+        // 更新 选中
+        this.$emit('update:active', index)
+      }
+    },
+
+    async onChannelDelete (channel, index) {
+      try {
+        if (this.fixedChannels.includes(channel.id)) {
+          // 固定列表 不让删除
+          return
+        }
+
+        if (this.user) {
+          // 已登录，将数据存储到线上
+          await deleteUserChannel(channel.id)
+
+          // 如果删除的是前面的元素，激活索引需要减1
+          if (index <= this.active) {
+            // 更新 选中
+            this.$emit('update:active', this.active - 1)
+          }
+          // 更新视图 直接给channels删除即可，计算属性自动处理推荐列表
+          const myChannels = this.channels
+          myChannels.splice(index, 1)
+          this.$emit('update:channels', myChannels)
+        } else {
+          // 如果删除的是前面的元素，激活索引需要减1
+          if (index <= this.active) {
+            // 更新 选中
+            this.$emit('update:active', this.active - 1)
+          }
+          // 更新视图 直接给channels删除即可，计算属性自动处理推荐列表
+          const myChannels = this.channels
+          myChannels.splice(index, 1)
+          this.$emit('update:channels', myChannels)
+
+          // 未登录，将数据存储到本地
+          await this.$nextTick(() => {
+            setItem(MY_CHANNELS_KEY, this.channels)
+          })
+        }
+      } catch (e) {
+        this.$toast('删除频道失败，请稍后重试')
       }
     }
-  }
 
+  }
 }
 </script>
 

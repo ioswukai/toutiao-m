@@ -78,9 +78,9 @@
       默认：只有第一次更新
       -->
       <channel-edit
-        :channels="channels"
         @close="isChannelEditShow = false"
-        v-model="active"
+        v-model:active="active"
+        v-model:channels="channels"
         v-if="isChannelEditShow"
       />
     </van-popup>
@@ -93,6 +93,9 @@ import { getUserChannels } from '@/api/user'
 // import ArticleList from './components/article-list'
 import ArticleListNew from './components/article-list-new'
 import ChannelEdit from './components/channel-edit'
+import { mapState } from 'vuex'
+import { getItem } from '@/utils/storage'
+const MY_CHANNELS_KEY = 'TOUTIAO_MY_CHANNELS'
 
 export default {
   name: 'HomeIndex',
@@ -111,8 +114,26 @@ export default {
       isChannelEditShow: false // 控制popup弹层
     }
   },
-  computed: {},
-  watch: {},
+  computed: {
+    // 映射容器中的数据到组件
+    ...mapState(['user'])
+  },
+  watch: {
+    /**
+     * 后台返回数据的index 不准确，导致跳转有问题，
+     * 用v-model实时绑定本地数据channels, 不请求网络
+     * */
+    // // 监听isChannelEditShow的关闭，刷新页面
+    // // 可能对频道进行的编辑，首页需要实时更新
+    // isChannelEditShow: {
+    //   handler (val, oldVal) {
+    //     if (val === false) {
+    //       // 关闭事件，发起请求
+    //       this.loadUserChannels()
+    //     }
+    //   }
+    // }
+  },
   created () {
     this.loadUserChannels()
   },
@@ -121,8 +142,24 @@ export default {
   methods: {
     async loadUserChannels () {
       try {
-        const { data } = await getUserChannels()
-        this.channels = data.data.channels
+        let channels = []
+        if (this.user) {
+          // 已登录，从服务器获取数据
+          const { data } = await getUserChannels()
+          channels = data.data.channels
+        } else {
+          // 未登录 从本地获取
+          channels = getItem(MY_CHANNELS_KEY)
+          console.log('从本地获取的数据是', channels)
+          if (!channels) {
+            // 本地没有，请求默认数据
+            const { data } = await getUserChannels()
+            channels = data.data.channels
+          }
+        }
+
+        // 将数据更新到组件中
+        this.channels = channels
       } catch (e) {
         this.$toast('获取频道数据失败')
       }
