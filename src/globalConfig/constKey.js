@@ -10,6 +10,10 @@ export default {
     /**
      * 首页/频道编辑---我的频道
      */
-    myChannels: 'TOUTIAO_MY_CHANNELS'
+    myChannels: 'TOUTIAO_MY_CHANNELS',
+    /**
+     * 搜索---历史搜索
+     */
+    searchHistorys: 'TOUTIAO_SEARCH_HISTORY'
   }
 }

@@ -16,9 +16,16 @@
         background="#3196fa"
         shape="round"
         @search="onSearch"
-        @cancel="onCancel"
+        @cancel="onClearText"
         @focus="isResultShow = false"
-      />
+      >
+        <template #left>
+          <van-button
+            color="#3196fa"
+            @click="onCancel"
+          >返回</van-button>
+        </template>
+      </van-search>
     </form>
 
     <!--搜索结果-->
@@ -41,6 +48,7 @@
     <!--历史记录-->
     <search-history
       v-else
+      @search="onSearch"
     />
     <!--历史记录-->
 
@@ -51,6 +59,7 @@
 import SearchHistory from './components/search-history'
 import SearchResult from './components/search-result'
 import SearchSuggestion from './components/search-suggestion'
+import { mapState } from 'vuex'
 
 export default {
   name: 'SearchIndex',
@@ -67,22 +76,47 @@ export default {
     }
   },
   emits: {},
-  computed: {},
+  computed: {
+    ...mapState(['searchHistorys'])
+  },
   watch: {},
   created () {
   },
   mounted () {
   },
   methods: {
+    // 搜索
     onSearch (val) {
       // 当点击联想建议，搜索时，更改文本框内容
       this.searchText = val
       // 显示搜索结果
       this.isResultShow = true
+      // 往历史记录里存 数据
+      this.storeTextToHistorys(val)
+    },
+
+    // 存入历史记录
+    storeTextToHistorys (val) {
+      if (!this.searchHistorys) {
+        this.$store.commit('setSearchHistorys', [])
+      }
+      if (this.searchHistorys.includes(val)) {
+        // 已存在先删除
+        this.searchHistorys.splice(this.searchHistorys.indexOf(val), 1)
+      }
+      // 置顶添加
+      this.searchHistorys.unshift(val)
+      // 存储历史记录
+      this.$store.commit('setSearchHistorys', this.searchHistorys)
     },
 
     onCancel () {
       this.$router.back()
+    },
+
+    onClearText () {
+      this.searchText = ''
+      this.isResultShow = false
     }
   }
 }
@@ -91,6 +125,9 @@ export default {
 <style scoped lang="less">
 
 // 导航栏
+.van-button--normal {
+  padding-left: 0;
+}
 :deep(.van-search__action) {
   color: white;
   background-color: #3196fa;
