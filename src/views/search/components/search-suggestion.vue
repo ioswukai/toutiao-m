@@ -6,7 +6,9 @@
       :key="idx"
     >
       <template #title>
-        <span class="search-text">{{text}}</span>
+<!--        需要高亮显示搜索文本 就不能这样写了-->
+<!--        <span class="search-text">{{text}}</span>-->
+        <div class="search-text" v-html="highlight(text)"></div>
       </template>
     </van-cell>
   </div>
@@ -58,6 +60,26 @@ export default {
         q: val
       })
       this.suggestions = data.data.options
+    },
+
+    highlight (text) {
+      const highlightStr = `<span class="active">${this.searchText}</span>`
+      /**
+       * `//gi`表示`//`表示正则表达式，且它中间的内容，
+       *  都会被当作匹配字符来使用，而不是数据变量，
+       *  所以不能写 `/this.searchText/`
+       *  g表示全局替换，i表示替换时忽略大小写
+       */
+      // return text.replace(/this.searchText/gi, highlightStr)
+      /**
+       * 如果要根据数据变量，动态的创建正则表达式，则需手动new RegExp
+       * RegExp 正则表达式的构造函数
+       *  参数1：匹配模式字符串，它会根据这个字符串创建正则对象，
+       *        它会计算this.searchText的值，得到该字符串
+       *  参数2：匹配模式，要写到字符串中
+       */
+      const reg = new RegExp(this.searchText, 'gi')
+      return text.replace(reg, highlightStr)
     }
   }
 }
@@ -65,5 +87,8 @@ export default {
 
 <style scoped lang="less">
 .search-suggestion {
+  :deep(span.active) {
+    color: #3296fa;
+  }
 }
 </style>
