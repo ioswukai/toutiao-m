@@ -13,6 +13,7 @@
           round
           size="small"
           icon="search"
+          to="~@/views/search"
         >搜索</van-button>
       </template>
     </van-nav-bar>
@@ -95,7 +96,6 @@ import ArticleListNew from './components/article-list-new'
 import ChannelEdit from './components/channel-edit'
 import { mapState } from 'vuex'
 import { getItem } from '@/utils/storage'
-const MY_CHANNELS_KEY = 'TOUTIAO_MY_CHANNELS'
 
 export default {
   name: 'HomeIndex',
@@ -149,8 +149,7 @@ export default {
           channels = data.data.channels
         } else {
           // 未登录 从本地获取
-          channels = getItem(MY_CHANNELS_KEY)
-          console.log('从本地获取的数据是', channels)
+          channels = getItem(this.globalConfig.constKey.storageKey.myChannels)
           if (!channels) {
             // 本地没有，请求默认数据
             const { data } = await getUserChannels()
