@@ -1,7 +1,6 @@
 import { createStore } from 'vuex'
 import { setItem, getItem } from '@/utils/storage'
-
-const TOKEN_KEY = 'TOUTIAO_USER'
+import ConstKey from '@/globalConfig/constKey.js'
 
 export default createStore({
   // 初始化数据
@@ -9,7 +8,7 @@ export default createStore({
     // 一个对象，存储用户信息，包含token和refreshToken等数据
     // 本地存储操作，封装进storage类中
     // user: JSON.parse(window.localStorage.getItem(TOKEN_KEY))
-    user: getItem(TOKEN_KEY)
+    user: getItem(ConstKey.storageKey.user)
   },
   // 修改数据，永远通过mutations修改数据，可响应式
   mutations: {
@@ -21,7 +20,7 @@ export default createStore({
       // 为了防止刷新丢失，
       // 我们需要把数据备份到本地存储
       // window.localStorage.setItem(TOKEN_KEY, JSON.stringify(state.user))
-      setItem(TOKEN_KEY, state.user)
+      setItem(ConstKey.storageKey.user, state.user)
     }
   },
   actions: {

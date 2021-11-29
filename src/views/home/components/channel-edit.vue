@@ -75,7 +75,6 @@ import {
 } from '@/api/channel'
 import { setItem } from '@/utils/storage'
 import { mapState } from 'vuex'
-const MY_CHANNELS_KEY = 'TOUTIAO_MY_CHANNELS'
 
 export default {
   name: 'ChannelEdit',
@@ -171,7 +170,7 @@ export default {
 
           // 未登录，将数据存储到本地
           await this.$nextTick(() => {
-            setItem(MY_CHANNELS_KEY, this.channels)
+            setItem(this.globalConfig.constKey.storageKey.myChannels, this.channels)
           })
         }
       } catch (e) {
@@ -225,7 +224,7 @@ export default {
 
           // 未登录，将数据存储到本地
           await this.$nextTick(() => {
-            setItem(MY_CHANNELS_KEY, this.channels)
+            setItem(this.globalConfig.constKey.storageKey.myChannels, this.channels)
           })
         }
       } catch (e) {
