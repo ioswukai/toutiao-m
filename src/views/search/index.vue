@@ -24,6 +24,7 @@
     <!--搜索结果-->
     <search-result
       v-if="isResultShow"
+      :searchText="searchText"
     />
     <!--搜索结果-->
 
@@ -33,6 +34,7 @@
     <search-suggestion
       v-else-if="searchText"
       :searchText="searchText"
+      @search="onSearch"
     />
     <!--联想建议-->
 
@@ -73,6 +75,8 @@ export default {
   },
   methods: {
     onSearch (val) {
+      // 当点击联想建议，搜索时，更改文本框内容
+      this.searchText = val
       // 显示搜索结果
       this.isResultShow = true
     },

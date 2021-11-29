@@ -1,45 +1,44 @@
 <template>
-  <div class="search-result scroll-y-container">
-    <van-cell>
+  <common-page-list
+    v-model="list"
+    :load-data-request="onLoad"
+    @reset-current-page="currentPage=1"
+    @increase-current-page="currentPage++"
+    class="search-result scroll-y-container" >
+
+    <van-cell
+      v-for="(article, index) in list"
+      :key="index"
+    >
       <template #title>
-        <span class="search-text">结果1</span>
+        <span class="search-text">{{article.title}}</span>
       </template>
     </van-cell>
-    <van-cell>
-      <template #title>
-        <span class="search-text">结果2</span>
-      </template>
-    </van-cell>
-    <van-cell>
-      <template #title>
-        <span class="search-text">结果3</span>
-      </template>
-    </van-cell>
-    <van-cell>
-      <template #title>
-        <span class="search-text">结果4</span>
-      </template>
-    </van-cell>
-    <van-cell>
-      <template #title>
-        <span class="search-text">结果4</span>
-      </template>
-    </van-cell>
-    <van-cell>
-      <template #title>
-        <span class="search-text">结果4</span>
-      </template>
-    </van-cell>
-  </div>
+
+  </common-page-list>
 </template>
 
 <script>
+import { getSearchResult } from '@/api/search'
+import CommonPageList from '@/components/common-page-list'
+
 export default {
   name: 'SearchResult',
-  components: {},
-  props: {},
+  components: {
+    CommonPageList
+  },
+  props: {
+    searchText: {
+      type: String,
+      required: true
+    }
+  },
   data () {
-    return {}
+    return {
+      list: [], // 表格是数据源
+      networkData: null, // 网络请求返回的结果
+      currentPage: 1 // 当前请求页吗
+    }
   },
   emits: {},
   computed: {},
@@ -48,7 +47,18 @@ export default {
   },
   mounted () {
   },
-  methods: {}
+  methods: {
+    async onLoad () {
+      // 1. 请求获取数据
+      const { data } = await getSearchResult({
+        page: this.currentPage, // 页数
+        per_page: 20, // 每页数量
+        q: this.searchText // 搜索关键词
+      })
+      this.networkData = data.data
+      return this.networkData.results
+    }
+  }
 }
 </script>
 

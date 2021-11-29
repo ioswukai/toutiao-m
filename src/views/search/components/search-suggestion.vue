@@ -4,10 +4,13 @@
       icon="search"
       v-for="(text, idx) in suggestions"
       :key="idx"
+      @click="$emit('search', text)"
     >
       <template #title>
 <!--        需要高亮显示搜索文本 就不能这样写了-->
 <!--        <span class="search-text">{{text}}</span>-->
+        <!--  {{}} 双花括号绑定会直接输出纯文本内容，
+        使用v-html属性，可以绑定渲染带有HTML标签的字符串-->
         <div class="search-text" v-html="highlight(text)"></div>
       </template>
     </van-cell>
@@ -32,7 +35,9 @@ export default {
       suggestions: [] // 联想建议数据列表
     }
   },
-  emits: {},
+  emits: {
+    search: null // 通知父组件，搜索 所点击的联想建议
+  },
   computed: {},
   watch: {
     searchText: {
