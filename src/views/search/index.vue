@@ -97,9 +97,6 @@ export default {
 
     // 存入历史记录
     storeTextToHistorys (val) {
-      if (!this.searchHistorys) {
-        this.$store.commit('setSearchHistorys', [])
-      }
       if (this.searchHistorys.includes(val)) {
         // 已存在先删除
         this.searchHistorys.splice(this.searchHistorys.indexOf(val), 1)

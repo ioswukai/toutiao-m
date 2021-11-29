@@ -19,7 +19,7 @@
 
 <script>
 import { getSearchSuggestions } from '@/api/search'
-import debounce from 'lodash/debounce'
+import { debounce, escapeRegExp } from 'lodash'
 
 export default {
   name: 'SearchSuggestion',
@@ -83,7 +83,12 @@ export default {
        *        它会计算this.searchText的值，得到该字符串
        *  参数2：匹配模式，要写到字符串中
        */
-      const reg = new RegExp(this.searchText, 'gi')
+      // const reg = new RegExp(this.searchText, 'gi')
+      /**
+       * this.searchText中，如果包含关键字，如加号`c++`中的`+`需先转义
+       * 使用lodash escapeRegExp 进行转义
+       */
+      const reg = new RegExp(escapeRegExp(this.searchText), 'gi')
       return text.replace(reg, highlightStr)
     }
   }

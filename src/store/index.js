@@ -9,7 +9,7 @@ export default createStore({
     // 本地存储操作，封装进storage类中
     // user: JSON.parse(window.localStorage.getItem(TOKEN_KEY))
     user: getItem(ConstKey.storageKey.user),
-    searchHistorys: getItem(ConstKey.storageKey.searchHistorys)
+    searchHistorys: getItem(ConstKey.storageKey.searchHistorys) || []
   },
   // 修改数据，永远通过mutations修改数据，可响应式
   mutations: {

@@ -58,7 +58,7 @@ export default {
     deleteAll () {
       this.searchHistorys.length = 0
       // 存储历史记录
-      this.$store.commit('searchHistorys', this.searchHistorys)
+      this.$store.commit('setSearchHistorys', this.searchHistorys)
     }
   }
 }
