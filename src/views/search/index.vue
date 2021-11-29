@@ -22,15 +22,24 @@
     </form>
 
     <!--搜索结果-->
-    <search-result v-if="isResultShow"/>
+    <search-result
+      v-if="isResultShow"
+    />
     <!--搜索结果-->
 
-    <!--联想建议-->
-    <search-suggestion v-else-if="searchText"/>
+    <!--联想建议
+    :searchText="searchText" 将搜索内容传递给子组件
+    -->
+    <search-suggestion
+      v-else-if="searchText"
+      :searchText="searchText"
+    />
     <!--联想建议-->
 
     <!--历史记录-->
-    <search-history v-else/>
+    <search-history
+      v-else
+    />
     <!--历史记录-->
 
   </div>
