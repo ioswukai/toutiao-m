@@ -6,14 +6,11 @@
     @increase-current-page="currentPage++"
     class="search-result scroll-y-container" >
 
-    <van-cell
+    <article-item
       v-for="(article, index) in list"
       :key="index"
-    >
-      <template #title>
-        <span class="search-text">{{article.title}}</span>
-      </template>
-    </van-cell>
+      :article="article"
+    />
 
   </common-page-list>
 </template>
@@ -21,11 +18,13 @@
 <script>
 import { getSearchResult } from '@/api/search'
 import CommonPageList from '@/components/common-page-list'
+import ArticleItem from '@/components/article-item'
 
 export default {
   name: 'SearchResult',
   components: {
-    CommonPageList
+    CommonPageList,
+    ArticleItem
   },
   props: {
     searchText: {
