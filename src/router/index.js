@@ -37,6 +37,21 @@ const routes = [
     name: 'search',
     path: '/search',
     component: () => import('@/views/search')
+  },
+  { // 文章详情
+    name: 'article',
+    /**
+     * `/:articlId` 表示动态路由，
+     * 节点名`articlId`相当于通配符*，可接收任意内容
+     * 节点名`articlId`可以随便起名，但最好是要有意义
+     */
+    path: '/article/:articleId',
+    component: () => import('@/views/article'),
+    /**
+     * 开启props传参，说白了就是把路由参数映射到组件的props数据中
+     * 将路由参数`/:articlId` 自动设置为组件的props属性
+     */
+    props: true
   }
 ]
 

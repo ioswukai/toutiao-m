@@ -1,5 +1,19 @@
 <template>
-  <van-cell class="article-item">
+  <!-- :to 属性可以实现路由跳转 路由地址
+  该to属性，同VueRoute中的RouteLink组件的to属性
+  -->
+  <van-cell
+    class="article-item"
+    :to="{
+      // 根据路由名称进行跳转
+      name: 'article',
+      // 传递路由动态参数
+      params: {
+        // 属性名：路由路径中设计的动态参数名称
+        articleId: article.art_id
+      }
+    }"
+  >
     <template #title>
       <!-- vant 内置样式类
         van-multi-ellipsis--l2 最多显示两行，多了省略...
