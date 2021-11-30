@@ -21,3 +21,10 @@ import { sendRequest } from '@/utils/request'
 export const getArticles = params => {
   return sendRequest('/app/v1_1/articles', { params })
 }
+
+/**
+ * 获取文章详情
+ */
+export const getArticleById = articleId => {
+  return sendRequest(`/app/v1_0/articles/${articleId}`)
+}
