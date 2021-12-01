@@ -15,9 +15,9 @@
       :isCollected="article.is_collected"
       :articleId="article.art_id"
     />
-    <van-icon
-      color="#777"
-      name="good-job-o"
+    <like-article
+      :isLiked="article.attitude === 1"
+      :articleId="article.art_id"
     />
     <van-icon name="share" color="#777777"></van-icon>
   </div>
@@ -25,10 +25,11 @@
 
 <script>
 import CollectArticle from '@/components/collect-article'
+import LikeArticle from '../../../../components/like-article'
 
 export default {
   name: 'ArticleFooter',
-  components: { CollectArticle },
+  components: { LikeArticle, CollectArticle },
   props: {
     article: {
       type: Object,

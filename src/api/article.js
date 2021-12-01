@@ -42,3 +42,17 @@ export const addCollect = data => {
 export const deleteCollect = articleId => {
   return sendRequest(`/app/v1_0/article/collections/${articleId}`, { method: 'DELETE' })
 }
+
+/**
+ * 点赞文章
+ */
+export const addLike = data => {
+  return sendRequest('/app/v1_0/article/likings', { data, method: 'POST' })
+}
+
+/**
+ * 取消点赞
+ */
+export const deleteLike = articleId => {
+  return sendRequest(`/app/v1_0/article/likings/${articleId}`, { method: 'DELETE' })
+}
