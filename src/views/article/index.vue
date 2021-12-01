@@ -10,16 +10,11 @@
 
     <div class="main-wrap">
       <!-- 加载中 -->
-      <div class="loading-wrap">
-        <van-loading
-          class="loading"
-          color="#3296fa"
-          vertical>加载中...</van-loading>
-      </div>
+      <loading-page v-if="loading" />
       <!-- 加载中 -->
 
-      <!-- 加载完成-文章详情 -->
-      <div class="article-detail">
+      <!-- 加载完成-文章详情 存在article.title 加载成功-->
+      <div v-else-if="article.title" class="article-detail">
 
         <!-- 用户信息 -->
         <div class="header">
@@ -53,25 +48,14 @@
       </div>
       <!-- 加载完成-文章详情 -->
 
-      <!-- /加载失败：404 -->
-      <div class="error-wrap">
-        <van-empty
-          description="该资源不存在或已删除！"
-          image="network"
-        />
-      </div>
-      <!-- 加载失败：404 -->
+      <!-- 加载失败 -->
+      <error-page
+        v-else
+        :error="error"
+        @retry-btn-click="loadArticle"
+      />
+      <!-- 加载失败 -->
 
-      <!-- 加载失败：其它未知错误（例如网络原因或服务端异常） -->
-      <div class="error-wrap">
-        <van-empty description="内容加载失败！">
-          <van-button
-            round
-            type="danger"
-            class="retry-btn">点击重试</van-button>
-        </van-empty>
-      </div>
-      <!-- /加载失败：其它未知错误（例如网络原因或服务端异常） -->
     </div>
 
     <!-- 底部区域 -->
@@ -105,30 +89,46 @@
 <script>
 import Network from '@/globalConfig/network.js'
 import { getArticleById } from '@/api/article'
+import LoadingPage from '@/components/loading-page'
+import ErrorPage from '@/components/error-page'
 
 export default {
   name: 'ArticleIndex',
-  components: {},
+  components: {
+    LoadingPage,
+    ErrorPage
+  },
   props: {
     articleId: Network.routeParamsProp
   },
   data () {
     return {
-      article: null
+      loading: true, // 控制加载中的 loading 状态
+      article: {}, // 文章详情
+      error: {} // 控制加载失败的显示
     }
   },
   emits: {},
   computed: {},
   watch: {},
   created () {
-    this.loadArticleDetail()
+    this.loadArticle()
   },
   mounted () {
   },
   methods: {
-    async loadArticleDetail () {
-      const { data } = await getArticleById(this.articleId)
-      this.article = data.data
+    async loadArticle () {
+      try {
+        // 显示加载中
+        this.loading = true
+        const { data } = await getArticleById(this.articleId)
+        this.article = data.data
+      } catch (err) {
+        // 显示失败页面
+        this.error = err
+      }
+      // 取消加载中显示
+      this.loading = false
     }
   }
 }
@@ -194,43 +194,12 @@ export default {
 }
 
 // 正文
-// loading
-.loading-wrap {
-  padding: 200px 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
 // 文本内容
 .article-content {
   padding: 40px 32px;
   :deep(p) {
     // 段落文本，两端对齐
     text-align: justify;
-  }
-}
-// error
-:deep(.van-empty__bottom) {
-  margin-top: 0;
-}
-.retry-btn {
-  width: 280px;
-  height: 70px;
-  line-height: 70px;
-  font-size: 30px;
-}
-.error-wrap {
-  // 让错误视图，能够称满一屏
-  padding: 200px 32px;
-  // 让错误视图，居中显示
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  :deep(.van-empty__description) {
-    font-size: 30px;
-    color: #666666;
-    margin: 33px 0 46px;
   }
 }
 
