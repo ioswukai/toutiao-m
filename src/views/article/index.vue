@@ -32,8 +32,17 @@
         <!-- 分割线 -->
         <van-divider>正文结束</van-divider>
 
+        <!-- 文章评论 -->
+        <comment-list
+          :source="article.art_id"
+          @updateTotalCommentCount="totalCommentCount = $event"
+        />
+
         <!-- 底部区域 需要用到article，所以应该在article返回后渲染-->
-        <article-footer :article="article"/>
+        <article-footer
+          :article="article"
+          :badge="totalCommentCount"
+        />
       </div>
 
       <!-- 加载失败 -->
@@ -54,10 +63,12 @@ import ErrorPage from '@/components/error-page'
 import imagePreviewByElement from '@/utils/imagePreviewByElement'
 import ArticleAuth from '@/components/article-auth'
 import ArticleFooter from './components/article-footer'
+import CommentList from './components/comment-list'
 
 export default {
   name: 'ArticleIndex',
   components: {
+    CommentList,
     LoadingPage,
     ErrorPage,
     ArticleAuth,
@@ -70,7 +81,8 @@ export default {
     return {
       loading: true, // 控制加载中的 loading 状态
       article: {}, // 文章详情
-      error: {} // 控制加载失败的显示
+      error: {}, // 控制加载失败的显示
+      totalCommentCount: 0 // 总评论数
     }
   },
   emits: {},

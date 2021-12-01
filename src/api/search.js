@@ -1,5 +1,5 @@
 /**
- * 文章搜索相关内容
+ * 文章搜索模块
  */
 import { sendRequest } from '@/utils/request'
 

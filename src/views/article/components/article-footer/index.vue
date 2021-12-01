@@ -8,7 +8,7 @@
     >写评论</van-button>
     <van-icon
       name="comment-o"
-      info="123"
+      :badge="badge > 0 ? badge : ''"
       color="#777"
     />
     <collect-article
@@ -25,7 +25,7 @@
 
 <script>
 import CollectArticle from '@/components/collect-article'
-import LikeArticle from '../../../../components/like-article'
+import LikeArticle from '@/components/like-article'
 
 export default {
   name: 'ArticleFooter',
@@ -34,6 +34,10 @@ export default {
     article: {
       type: Object,
       required: true
+    },
+    badge: {
+      type: Number,
+      default: 0
     }
   },
   data () {

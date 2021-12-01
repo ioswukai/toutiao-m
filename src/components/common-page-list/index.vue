@@ -18,7 +18,7 @@
       <van-list
         v-model:loading="loading"
         :finished="finished"
-        finished-text="没有更多了"
+        :finished-text="finishedText"
         v-model:error="error"
         error-text="请求失败，点击重新加载"
         @load="onLoad"
@@ -61,6 +61,22 @@ export default {
       default: () => {
         return []
       }
+    },
+    /**
+     * 加载完所有数据后，给的提示
+     */
+    finishedText: {
+      type: String,
+      default: '没有更多了'
+    },
+    /**
+     * 设置控件自身的overflow-y 属性，
+     * 默认值为'auto'，即：控件拥有自己的滚动容器
+     * 如传递：'unset'，则使用父组件作为滚动容器
+     */
+    overflowY: {
+      type: String,
+      default: 'auto'
     }
   },
   emits: {
@@ -180,6 +196,6 @@ export default {
 
   // 在css中，通过v-bind使用js变量  由父组件，通过$attrs传递更灵活
   //height: v-bind(height);
-  overflow-y: auto;
+  overflow-y: v-bind(overflowY);
 }
 </style>
