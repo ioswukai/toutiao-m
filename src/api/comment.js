@@ -23,3 +23,10 @@ export const addCommentLike = data => {
 export const deleteCommentLike = commentId => {
   return sendRequest(`/app/v1_0/comment/likings/${commentId}`, { method: 'DELETE' })
 }
+
+/**
+ * 发布文章的评论或评论回访
+ */
+export const addComment = data => {
+  return sendRequest('/app/v1_0/comments', { data, method: 'POST' })
+}

@@ -36,13 +36,29 @@
         <comment-list
           :source="article.art_id"
           @updateTotalCommentCount="totalCommentCount = $event"
+          :freshComment="needRefreshComment"
         />
 
         <!-- 底部区域 需要用到article，所以应该在article返回后渲染-->
         <article-footer
           :article="article"
           :badge="totalCommentCount"
+          @write-comment="isPostShow = true"
         />
+
+        <!--
+        position="bottom" 从底部弹出
+        -->
+        <van-popup
+          v-model:show="isPostShow"
+          position="bottom"
+        >
+          <comment-post
+            v-if="isPostShow"
+            :target="article.art_id"
+            @post-success="onPostSuccess"
+          />
+        </van-popup>
       </div>
 
       <!-- 加载失败 -->
@@ -64,10 +80,12 @@ import imagePreviewByElement from '@/utils/imagePreviewByElement'
 import ArticleAuth from '@/components/article-auth'
 import ArticleFooter from './components/article-footer'
 import CommentList from './components/comment-list'
+import CommentPost from './components/comment-post'
 
 export default {
   name: 'ArticleIndex',
   components: {
+    CommentPost,
     CommentList,
     LoadingPage,
     ErrorPage,
@@ -82,7 +100,9 @@ export default {
       loading: true, // 控制加载中的 loading 状态
       article: {}, // 文章详情
       error: {}, // 控制加载失败的显示
-      totalCommentCount: 0 // 总评论数
+      totalCommentCount: 0, // 总评论数
+      isPostShow: false, // 控制写评论弹框的显隐
+      needRefreshComment: false // 控制评论列表，是否需要刷新
     }
   },
   emits: {},
@@ -111,6 +131,20 @@ export default {
       }
       // 取消加载中显示
       this.loading = false
+    },
+
+    onPostSuccess (data) {
+      // 关闭弹框
+      this.isPostShow = false
+
+      // 将发布内容显示到列表顶部 刷新评论
+      this.needRefreshComment = true
+
+      // 重置needRefreshComment状态，方便下次使用
+      // 将重置状态的代码，放在html的最后
+      setTimeout(() => {
+        this.needRefreshComment = false
+      }, 0)
     }
   }
 }

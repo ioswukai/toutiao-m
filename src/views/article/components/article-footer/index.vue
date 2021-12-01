@@ -5,6 +5,7 @@
       type="default"
       round
       size="small"
+      @click="$emit('write-comment')"
     >写评论</van-button>
     <van-icon
       name="comment-o"
@@ -43,7 +44,9 @@ export default {
   data () {
     return {}
   },
-  emits: {},
+  emits: {
+    'write-comment': null
+  },
   computed: {},
   watch: {},
   created () {

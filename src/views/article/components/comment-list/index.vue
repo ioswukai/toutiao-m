@@ -4,6 +4,7 @@
     v-model="list"
     finishedText="已展示所有评论"
     overflowY="unset"
+    :isNeedFreshList="freshComment"
     :load-data-request="onLoad"
     @reset-current-page="offset = null"
     @increase-current-page="offset = networkData.last_id"
@@ -27,7 +28,11 @@ export default {
   name: 'CommentList',
   components: { CommentItem, CommonPageList },
   props: {
-    source: Network.routeParamsProp
+    source: Network.routeParamsProp,
+    freshComment: {
+      type: Boolean,
+      default: false
+    }
   },
   data () {
     return {
