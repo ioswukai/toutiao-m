@@ -15,13 +15,20 @@
     </div>
 
     <!--关注按钮-->
-    <follow-user />
+    <follow-user
+      v-if="!user || article.aut_id !== user.user_id"
+      class="follow-user"
+      :isFollowed="article.is_followed"
+      :userId="article.aut_id"
+    />
   </div>
 
 </template>
 
 <script>
 import FollowUser from '@/components/follow-user'
+import { mapState } from 'vuex'
+
 export default {
   name: 'ArticleAuth',
   components: {
@@ -37,7 +44,9 @@ export default {
     return {}
   },
   emits: {},
-  computed: {},
+  computed: {
+    ...mapState(['user'])
+  },
   watch: {},
   created () {
   },
@@ -77,5 +86,13 @@ export default {
 .user-date {
   font-size: 24px;
   color: #999;
+}
+// 关注按钮
+.follow-user {
+  width: 200px;
+  height: 60px;
+  font-size: 24px;
+  // 设置圆角
+  border-radius: 30px
 }
 </style>

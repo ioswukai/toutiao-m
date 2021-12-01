@@ -2,7 +2,8 @@
  * 用户相关请求模块
  */
 
-import request from '@/utils/request'
+import request, { sendRequest } from '@/utils/request'
+
 // import store from '@/store'
 
 export const login = data => {
@@ -49,4 +50,18 @@ export const getUserChannels = () => {
     method: 'GET',
     url: '/app/v1_0/user/channels'
   })
+}
+
+/**
+ * 关注用户
+ */
+export function followUser (data) {
+  return sendRequest('/app/v1_0/user/followings', { data, method: 'POST' })
+}
+
+/**
+ * 取消关注用户
+ */
+export function unFollowUser (userId) {
+  return sendRequest(`/app/v1_0/user/followings/${userId}`, { method: 'DELETE' })
 }

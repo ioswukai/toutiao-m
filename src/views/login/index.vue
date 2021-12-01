@@ -138,6 +138,7 @@ export default {
       try {
         // 结构服务器返回的值
         const { data } = await login(user)
+        // 4. 接收请求结果，后续处理
         // 向Vuex提交user的修改
         this.$store.commit('setUser', data.data)
         this.$toast.success('登录成功')
@@ -154,7 +155,6 @@ export default {
           this.$toast.fail('手机号或验证码错误')
         }
       }
-      // 4. 接收请求结果，后续处理
     },
     async onSendSms () {
       // 1. 校验手机号
