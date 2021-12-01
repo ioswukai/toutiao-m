@@ -16,9 +16,11 @@
       <!-- 加载完成-文章详情 存在article.title 加载成功-->
       <div v-else-if="article.title" class="article-detail">
 
+        <!-- 标题 -->
+        <div class="title">{{article.title}}</div>
+
         <!-- 用户信息 -->
         <ArticleAuth :article="article"/>
-        <!-- 用户信息 -->
 
         <!-- 文章内容 -->
         <div
@@ -26,7 +28,8 @@
           v-html="article.content"
           ref="articleContentRef"
         />
-        <!-- 文章内容 -->
+
+        <!-- 分割线 -->
         <van-divider>正文结束</van-divider>
       </div>
 
@@ -49,7 +52,7 @@ import { getArticleById } from '@/api/article'
 import LoadingPage from '@/components/loading-page'
 import ErrorPage from '@/components/error-page'
 import imagePreviewByElement from '@/utils/imagePreviewByElement'
-import ArticleAuth from './components/article-auth'
+import ArticleAuth from '@/components/article-auth'
 import ArticleFooter from './components/article-footer'
 
 export default {
@@ -86,6 +89,7 @@ export default {
         const { data } = await getArticleById(this.articleId)
         this.article = data.data
         // 添加图片预览 articleContentRef需要页面渲染完，才能拿到
+        // 因此将其包裹在setTimeout内
         setTimeout(() => {
           imagePreviewByElement(this.$refs.articleContentRef)
         }, 0)
@@ -112,6 +116,14 @@ export default {
   bottom: 88px;
   overflow-y: scroll;
   background-color: #fff;
+}
+
+// 标题
+.title {
+  font-size: 32px;
+  font-weight: bold;
+  color: #333;
+  margin: 32px 40px;
 }
 
 // 正文
