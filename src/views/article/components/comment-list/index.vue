@@ -42,6 +42,14 @@ export default {
   computed: {},
   watch: {},
   created () {
+    /**
+     * 修复 在comment-list组件渲染前
+     * 评论列表组件，不发送onLoad请求，导致父组件
+     * 文章详情的评论总数不显示的bug
+     *
+     * 解决办法，手动在created()中去发送一次请求
+     */
+    this.onLoad()
   },
   mounted () {
   },
