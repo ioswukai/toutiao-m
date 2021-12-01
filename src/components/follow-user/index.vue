@@ -64,6 +64,7 @@ export default {
         }
         // 更新UI
         this.followState = !this.followState
+        this.$toast.success(this.followState ? '关注成功' : '取消关注成功')
       } catch (err) {
         if (err.response && err.response.status === 410) {
           this.$toast('你不能关注你自己')
