@@ -116,7 +116,7 @@ export default {
 
 // 正文
 .article-content {
-  padding: 32px;
+  padding: 16px 40px;
   :deep(p) {
     // 段落文本，两端对齐
     text-align: justify;

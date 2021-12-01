@@ -64,6 +64,7 @@ export default {
   // top边线的高度，应该总高度内
   box-sizing: border-box;
   border-top: 1px solid #d8d8d8;
+  background-color: white;
   .comment-btn {
     width: 282px;
     height: 60px;
