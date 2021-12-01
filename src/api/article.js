@@ -28,3 +28,17 @@ export const getArticles = params => {
 export const getArticleById = articleId => {
   return sendRequest(`/app/v1_0/articles/${articleId}`)
 }
+
+/**
+ * 收藏文章
+ */
+export const addCollect = data => {
+  return sendRequest('/app/v1_0/article/collections', { data, method: 'POST' })
+}
+
+/**
+ * 取消收藏
+ */
+export const deleteCollect = articleId => {
+  return sendRequest(`/app/v1_0/article/collections/${articleId}`, { method: 'DELETE' })
+}

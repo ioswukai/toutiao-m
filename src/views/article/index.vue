@@ -8,7 +8,7 @@
       @click-left="$router.back()"
     />
 
-    <!--中间区域-->
+    <!--内容区域-->
     <div class="main-wrap">
       <!-- 加载中 -->
       <loading-page v-if="loading" />
@@ -31,6 +31,9 @@
 
         <!-- 分割线 -->
         <van-divider>正文结束</van-divider>
+
+        <!-- 底部区域 需要用到article，所以应该在article返回后渲染-->
+        <article-footer :article="article"/>
       </div>
 
       <!-- 加载失败 -->
@@ -39,9 +42,6 @@
         @retry-btn-click="loadArticle"
       />
     </div>
-
-    <!-- 底部区域 -->
-    <article-footer :article="article"/>
 
   </div>
 </template>

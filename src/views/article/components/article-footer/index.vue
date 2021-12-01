@@ -11,9 +11,9 @@
       info="123"
       color="#777"
     />
-    <van-icon
-      color="#777"
-      name="star-o"
+    <collect-article
+      :isCollected="article.is_collected"
+      :articleId="article.art_id"
     />
     <van-icon
       color="#777"
@@ -24,9 +24,11 @@
 </template>
 
 <script>
+import CollectArticle from '@/components/collect-article'
+
 export default {
   name: 'ArticleFooter',
-  components: {},
+  components: { CollectArticle },
   props: {
     article: {
       type: Object,
@@ -73,12 +75,12 @@ export default {
     font-size: 15px;
     color: #333;
   }
-  .van-icon {
-    font-size: 40px;
-    .van-info {
-      font-size: 22px;
-      background-color: #e22829;
-    }
+}
+:deep(.van-icon) {
+  font-size: 40px;
+  .van-info {
+    font-size: 22px;
+    background-color: #e22829;
   }
 }
 </style>
