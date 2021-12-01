@@ -9,3 +9,17 @@ import { sendRequest } from '@/utils/request'
 export const getComments = params => {
   return sendRequest('/app/v1_0/comments', { params })
 }
+
+/**
+ * 对评论或评论回复点赞
+ */
+export const addCommentLike = data => {
+  return sendRequest('/app/v1_0/comment/likings', { data, method: 'POST' })
+}
+
+/**
+ * 取消对评论或评论回复点赞
+ */
+export const deleteCommentLike = commentId => {
+  return sendRequest(`/app/v1_0/comment/likings/${commentId}`, { method: 'DELETE' })
+}

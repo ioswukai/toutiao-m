@@ -76,11 +76,12 @@ export default {
     async onCommentLike (comment) {
       try {
         // 如果已经赞了则取消点赞
+        const target = comment.com_id
         if (comment.is_liking) {
-          await deleteCommentLike(comment.com_id)
+          await deleteCommentLike(target)
         } else {
           // 如果没有赞，则点赞
-          await addCommentLike(comment.com_id)
+          await addCommentLike({ target })
         }
 
         // 更新视图状态
@@ -108,5 +109,6 @@ export default {
   align-items: center;
   justify-content: space-between;
   font-size: 13px;
+  margin-right: 20px;
 }
 </style>
