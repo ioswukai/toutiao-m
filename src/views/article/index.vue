@@ -70,6 +70,7 @@
             class="comment-reply"
             v-if="isReplyShow"
             :comment="toReplyComment"
+            :article-id="article.art_id"
             @reply-success="onPostOrReplyCommentSuccess"
           />
         </van-popup>

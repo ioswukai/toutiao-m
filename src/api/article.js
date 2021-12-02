@@ -51,7 +51,7 @@ export const addLike = data => {
 }
 
 /**
- * 取消点赞
+ * 取消文章点赞
  */
 export const deleteLike = articleId => {
   return sendRequest(`/app/v1_0/article/likings/${articleId}`, { method: 'DELETE' })

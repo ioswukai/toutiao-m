@@ -15,6 +15,7 @@
 <script>
 import Network from '@/globalConfig/network'
 import { addLike, deleteLike } from '@/api/article'
+import { addCommentLike, deleteCommentLike } from '@/api/comment.js'
 
 export default {
   name: 'LikeArticle',
@@ -25,7 +26,12 @@ export default {
       type: Boolean,
       default: false
     },
-    articleId: Network.routeParamsProp
+    // 源id，文章id或评论id
+    target: Network.routeParamsProp,
+    isArticleLike: { // 默认是对文章点赞
+      type: Boolean,
+      default: true
+    }
   },
   data () {
     return {
@@ -44,16 +50,28 @@ export default {
       // 显示加载
       this.loading = true
 
-      // 发起请求
-      const target = this.articleId.toString()
+      // 源id，文章id或评论id
+      const target = this.target.toString()
       try {
         // 外面包裹一层try 防止js报错，后面取消loading的代码无法执行
         if (this.likedState) {
           // 已关注，执行取消关注操作
-          await deleteLike(target)
+          if (this.isArticleLike) {
+            // 文章
+            await deleteLike(target)
+          } else {
+            // 评论
+            await deleteCommentLike(target)
+          }
         } else {
           // 未关注，执行关注操作
-          await addLike({ target })
+          if (this.isArticleLike) {
+            // 文章
+            await addLike({ target })
+          } else {
+            // 评论
+            await addCommentLike({ target })
+          }
         }
         // 更新UI
         this.likedState = !this.likedState

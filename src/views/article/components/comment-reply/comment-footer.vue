@@ -1,5 +1,5 @@
 <template>
-  <div class="article-footer">
+  <div class="comment-footer">
     <van-button
       class="comment-btn"
       type="default"
@@ -7,38 +7,26 @@
       size="small"
       @click="$emit('write-comment')"
     >写评论</van-button>
-    <van-icon
-      name="comment-o"
-      :badge="badge > 0 ? badge : ''"
-      color="#777"
-    />
-    <collect-article
-      :isCollected="article.is_collected"
-      :articleId="article.art_id"
-    />
+
     <like-article
-      :isLiked="article.attitude === 1"
-      :target="article.art_id"
+      :isLiked="comment.is_liking"
+      :target="comment.com_id"
+      :isArticleLike="false"
     />
-    <van-icon name="share" color="#777777"></van-icon>
+
   </div>
 </template>
 
 <script>
-import CollectArticle from '@/components/collect-article'
 import LikeArticle from '@/components/like-article'
 
 export default {
-  name: 'ArticleFooter',
-  components: { LikeArticle, CollectArticle },
+  name: 'CommentFooter',
+  components: { LikeArticle },
   props: {
-    article: {
+    comment: {
       type: Object,
       required: true
-    },
-    badge: {
-      type: Number,
-      default: 0
     }
   },
   data () {
@@ -58,7 +46,7 @@ export default {
 </script>
 
 <style scoped lang="less">
-.article-footer {
+.comment-footer {
   // 固定在底部
   position: fixed;
   left: 0;
@@ -76,7 +64,7 @@ export default {
   border-top: 1px solid #d8d8d8;
   background-color: white;
   .comment-btn {
-    width: 282px;
+    width: 450px;
     height: 60px;
     line-height: 60px;
     border: 1px solid #eeeeee;
