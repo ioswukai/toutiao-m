@@ -45,7 +45,7 @@ export default {
       this.loading = true
 
       // 发起请求
-      const target = this.articleId
+      const target = this.articleId.toString()
       try {
         // 外面包裹一层try 防止js报错，后面取消loading的代码无法执行
         if (this.collectedState) {

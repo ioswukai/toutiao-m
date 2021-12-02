@@ -37,6 +37,7 @@
           ref="comment-list"
           :source="article.art_id"
           @updateTotalCommentCount="totalCommentCount = $event"
+          @click-reply="onReplyComment"
         />
 
         <!-- 底部区域 需要用到article，所以应该在article返回后渲染-->
@@ -46,7 +47,7 @@
           @write-comment="isPostShow = true"
         />
 
-        <!--
+        <!-- 对文章发布评论
         position="bottom" 从底部弹出
         -->
         <van-popup
@@ -56,7 +57,20 @@
           <comment-post
             v-if="isPostShow"
             :target="article.art_id"
-            @post-success="onPostSuccess"
+            @post-success="onPostOrReplyCommentSuccess"
+          />
+        </van-popup>
+
+        <!-- 对评论发布回复-->
+        <van-popup
+          v-model:show="isReplyShow"
+          position="bottom"
+        >
+          <comment-reply
+            class="comment-reply"
+            v-if="isReplyShow"
+            :comment="toReplyComment"
+            @reply-success="onPostOrReplyCommentSuccess"
           />
         </van-popup>
       </div>
@@ -81,10 +95,12 @@ import ArticleAuth from '@/components/article-auth'
 import ArticleFooter from './components/article-footer'
 import CommentList from './components/comment-list'
 import CommentPost from './components/comment-post'
+import CommentReply from './components/comment-reply'
 
 export default {
   name: 'ArticleIndex',
   components: {
+    CommentReply,
     CommentPost,
     CommentList,
     LoadingPage,
@@ -101,7 +117,9 @@ export default {
       article: {}, // 文章详情
       error: {}, // 控制加载失败的显示
       totalCommentCount: 0, // 总评论数
-      isPostShow: false // 控制写评论弹框的显隐
+      isPostShow: false, // 控制写评论弹框的显隐
+      isReplyShow: false, // 控制回复评论弹框的显隐
+      toReplyComment: {} // 待回复的评论
     }
   },
   emits: {},
@@ -113,6 +131,7 @@ export default {
   mounted () {
   },
   methods: {
+    // 加载详情
     async loadArticle () {
       try {
         // 显示加载中
@@ -132,12 +151,21 @@ export default {
       this.loading = false
     },
 
-    onPostSuccess (data) {
+    // 发布评论成功回调
+    onPostOrReplyCommentSuccess () {
       // 关闭弹框
       this.isPostShow = false
+      this.isReplyShow = false
 
       // 将发布内容显示到列表顶部 刷新评论
       this.$refs['comment-list'].onRefresh()
+    },
+
+    onReplyComment (comment) {
+      // 记录comment对象，传给回复评论弹框
+      this.toReplyComment = comment
+      // 显示回复评论弹框
+      this.isReplyShow = true
     }
   }
 }
@@ -172,5 +200,10 @@ export default {
     // 段落文本，两端对齐
     text-align: justify;
   }
+}
+
+// 回复评论遮罩
+.comment-reply {
+  height: 90vh;
 }
 </style>

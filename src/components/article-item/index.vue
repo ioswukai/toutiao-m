@@ -10,7 +10,7 @@
       // 传递路由动态参数
       params: {
         // 属性名：路由路径中设计的动态参数名称
-        articleId: article.art_id
+        articleId: article.art_id.toString()
       }
     }"
   >

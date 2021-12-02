@@ -36,7 +36,7 @@ export default {
   name: 'CommentPost',
   components: {},
   props: {
-    target: Network.routeParamsProp
+    target: Network.routeParamsProp // 评论的目标id, 目标文章id或者目标评论id
   },
   data () {
     return {
@@ -61,7 +61,7 @@ export default {
       })
       try {
         const { data } = await addComment({
-          target: this.target, // 评论的目标id, 目标文章id或者目标评论id
+          target: this.target.toString(), // 评论的目标id, 目标文章id或者目标评论id
           content: this.message, // 评论内容
           art_id: null // 文章id，如果对评论回复需要传，对文章评论不用传
         })

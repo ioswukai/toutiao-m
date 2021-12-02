@@ -28,7 +28,11 @@ export default {
   name: 'CommentList',
   components: { CommentItem, CommonPageList },
   props: {
-    source: Network.routeParamsProp
+    source: Network.routeParamsProp, // 源id，文章id或评论id
+    isArticleCommemtList: { // 默认是文章评论列表，而非评论回复列表
+      type: Boolean,
+      default: true
+    }
   },
   data () {
     return {
@@ -38,7 +42,8 @@ export default {
     }
   },
   emits: {
-    updateTotalCommentCount: null
+    updateTotalCommentCount: null,
+    'click-reply': null
   },
   computed: {},
   watch: {},
@@ -57,9 +62,11 @@ export default {
   methods: {
     async onLoad () {
       // 1. 请求获取数据
+      // 评论的类型 a:对文章的评论 c:对评论的回复
+      const type = this.isArticleCommemtList ? 'a' : 'c'
       const { data } = await getComments({
-        type: 'a', // 评论的类型 a:对文章的评论 c:对评论的回复
-        source: this.source, // 源id，文章id或评论id
+        type,
+        source: this.source.toString(), // 源id，文章id或评论id
         /**
          * 获取评论数据的偏移量，值为评论id，
          * 表示从此id后取，
