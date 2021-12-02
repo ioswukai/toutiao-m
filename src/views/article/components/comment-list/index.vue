@@ -43,7 +43,7 @@ export default {
   },
   emits: {
     updateTotalCommentCount: null,
-    'click-reply': null,
+    'click-reply': null
   },
   computed: {},
   watch: {},
