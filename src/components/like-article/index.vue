@@ -29,16 +29,14 @@ export default {
   },
   data () {
     return {
-      likedState: false, // 父类的isLiked不可更改，为了方便引入自身属性
+      likedState: this.isLiked, // 父类的isLiked不可更改，为了方便引入自身属性
       loading: false // 控制按钮是否可以点击
     }
   },
   emits: {},
   computed: {},
   watch: {},
-  created () {
-    this.likedState = this.isLiked
-  },
+  created () {},
   mounted () {
   },
   methods: {

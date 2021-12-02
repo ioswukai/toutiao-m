@@ -34,16 +34,14 @@ export default {
   },
   data () {
     return {
-      followState: false, // 父类的isFollowed不可更改，为了方便引入自身属性
+      followState: this.isFollowed, // 父类的isFollowed不可更改，为了方便引入自身属性
       loading: false // 控制按钮是否可以点击
     }
   },
   emits: {},
   computed: {},
   watch: {},
-  created () {
-    this.followState = this.isFollowed
-  },
+  created () {},
   mounted () {
   },
   methods: {

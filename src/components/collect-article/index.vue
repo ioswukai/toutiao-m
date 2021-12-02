@@ -29,16 +29,14 @@ export default {
   },
   data () {
     return {
-      collectedState: false, // 父类的isCollected不可更改，为了方便引入自身属性
+      collectedState: this.isCollected, // 父类的isCollected不可更改，为了方便引入自身属性
       loading: false // 控制按钮是否可以点击
     }
   },
   emits: {},
   computed: {},
   watch: {},
-  created () {
-    this.collectedState = this.isCollected
-  },
+  created () {},
   mounted () {
   },
   methods: {
