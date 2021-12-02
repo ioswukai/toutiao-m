@@ -6,10 +6,11 @@
     autosize 对于输入视图 设置其高度自适应
     maxlength 最多输入的字符数
     show-word-limit 在底部显示字数统计
+    v-model.trim="message" 对message赋值时，自动去掉首尾的制表符 如空格
     -->
     <van-field
       class="post-field"
-      v-model="message"
+      v-model.trim="message"
       rows="2"
       autosize
       type="textarea"
@@ -17,9 +18,11 @@
       show-word-limit
       placeholder="优质评论将会被优先展示"
     />
+    <!--:disabled 控制按钮是否可点击, 有输入才可点击-->
     <van-button
       class="post-btn"
       @click="onPostComment"
+      :disabled="message.length <= 0"
     >发布</van-button>
 
   </div>
@@ -37,7 +40,7 @@ export default {
   },
   data () {
     return {
-      message: ''
+      message: '' // 评论的内容
     }
   },
   emits: {
