@@ -34,9 +34,9 @@
 
         <!-- 文章评论 -->
         <comment-list
+          ref="comment-list"
           :source="article.art_id"
           @updateTotalCommentCount="totalCommentCount = $event"
-          :freshComment="needRefreshComment"
         />
 
         <!-- 底部区域 需要用到article，所以应该在article返回后渲染-->
@@ -101,8 +101,7 @@ export default {
       article: {}, // 文章详情
       error: {}, // 控制加载失败的显示
       totalCommentCount: 0, // 总评论数
-      isPostShow: false, // 控制写评论弹框的显隐
-      needRefreshComment: false // 控制评论列表，是否需要刷新
+      isPostShow: false // 控制写评论弹框的显隐
     }
   },
   emits: {},
@@ -138,13 +137,7 @@ export default {
       this.isPostShow = false
 
       // 将发布内容显示到列表顶部 刷新评论
-      this.needRefreshComment = true
-
-      // 重置needRefreshComment状态，方便下次使用
-      // 将重置状态的代码，放在html的最后
-      setTimeout(() => {
-        this.needRefreshComment = false
-      }, 0)
+      this.$refs['comment-list'].onRefresh()
     }
   }
 }

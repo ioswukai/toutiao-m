@@ -1,10 +1,10 @@
 <template>
   <common-page-list
     class="comment-list"
+    ref="common-page-list"
     v-model="list"
     finishedText="已展示所有评论"
     overflowY="unset"
-    :isNeedFreshList="freshComment"
     :load-data-request="onLoad"
     @reset-current-page="offset = null"
     @increase-current-page="offset = networkData.last_id"
@@ -28,11 +28,7 @@ export default {
   name: 'CommentList',
   components: { CommentItem, CommonPageList },
   props: {
-    source: Network.routeParamsProp,
-    freshComment: {
-      type: Boolean,
-      default: false
-    }
+    source: Network.routeParamsProp
   },
   data () {
     return {
@@ -76,6 +72,11 @@ export default {
       // 通知父组件，更新评论总数
       this.$emit('updateTotalCommentCount', this.networkData.total_count)
       return this.networkData.results
+    },
+
+    onRefresh () {
+      // 重新刷新列表
+      this.$refs['common-page-list'].onRefresh()
     }
   }
 }

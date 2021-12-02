@@ -77,13 +77,6 @@ export default {
     overflowY: {
       type: String,
       default: 'auto'
-    },
-    /**
-     * 需要调用代码来刷新列表
-     */
-    isNeedFreshList: {
-      type: Boolean,
-      default: false
     }
   },
   emits: {
@@ -111,16 +104,7 @@ export default {
     }
   },
   computed: {},
-  watch: {
-    isNeedFreshList: {
-      handler (val) {
-        if (val) {
-          // 重新刷新列表
-          this.onRefresh()
-        }
-      }
-    }
-  },
+  watch: {},
   created () {
   },
   mounted () {
