@@ -11,12 +11,30 @@
     <van-datetime-picker
       v-model="currentDate"
       type="date"
-      title="选择年月日"
+      title="选择出生日期"
       :min-date="minDate"
       :max-date="maxDate"
       @cancel="$emit('cancel')"
       @confirm="onFinish"
     />
+
+    <!--下面的代码，
+    绑定时创建对象数据
+    :min-date="new Date(1970,0,1)"
+    :max-date="new Date()"
+    同时使用绑定了data属性
+    v-model="currentDate"
+    这两操作叠加在一起，导致编译报错 Maximum recursive
+    -->
+<!--    <van-datetime-picker-->
+<!--      v-model="currentDate"-->
+<!--      type="date"-->
+<!--      title="选择出生日期"-->
+<!--      :min-date="new Date(1970,0,1)"-->
+<!--      :max-date="new Date()"-->
+<!--      @cancel="$emit('cancel')"-->
+<!--      @confirm="onFinish"-->
+<!--    />-->
   </div>
 </template>
 
