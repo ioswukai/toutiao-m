@@ -65,3 +65,24 @@ export function followUser (data) {
 export function unFollowUser (userId) {
   return sendRequest(`/app/v1_0/user/followings/${userId}`, { method: 'DELETE' })
 }
+
+/**
+ * 获取用户个人资料
+ */
+export function getProfile () {
+  return sendRequest('/app/v1_0/user/profile')
+}
+
+/**
+ * 更新用户个人资料
+ */
+export function updateUserProfile (data) {
+  return sendRequest('/app/v1_0/user/profile', { data, method: 'PATCH' })
+}
+
+/**
+ * 更新用户照片资料
+ */
+export function updateUserPhoto (data) {
+  return sendRequest('/app/v1_0/user/photo', { data, method: 'PATCH' })
+}

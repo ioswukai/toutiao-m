@@ -52,6 +52,11 @@ const routes = [
      * 将路由参数`/:articlId` 自动设置为组件的props属性
      */
     props: true
+  },
+  { // 个人信息
+    name: 'user-profile',
+    path: '/user-profile',
+    component: () => import('@/views/user-profile')
   }
 ]
 
