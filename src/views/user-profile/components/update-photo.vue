@@ -1,6 +1,6 @@
 <template>
   <div class="update-photo">
-    <!--图片预览-->
+    <!--图片裁切-->
     <image-cropper
       ref="cropper"
       :src="src"
