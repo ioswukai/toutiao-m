@@ -57,6 +57,11 @@ const routes = [
     name: 'user-profile',
     path: '/user-profile',
     component: () => import('@/views/user-profile')
+  },
+  { // 小智同学
+    name: 'user-chat',
+    path: '/user-chat',
+    component: () => import('@/views/user-chat')
   }
 ]
 

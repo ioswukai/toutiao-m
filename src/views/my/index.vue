@@ -17,7 +17,7 @@
         <div class="right">
           <van-button
             to="/user-profile"
-            size="mini"
+            size="small"
             round>编辑资料</van-button>
         </div>
       </div>
@@ -82,7 +82,11 @@
     <!-- 小智 -->
     <van-cell-group class="cell-wrap" :border="false">
       <van-cell title="消息通知" is-link />
-      <van-cell title="小智同学" is-link />
+      <van-cell
+        title="小智同学"
+        is-link
+        to="/user-chat"
+      />
     </van-cell-group>
     <!-- 小智 -->
 
