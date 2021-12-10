@@ -2,6 +2,7 @@
 
   <common-page-list
     v-model="list"
+    :finished="finished"
     :load-data-request="onLoad"
     @reset-current-page="currentPage=''"
     @increase-current-page="currentPage=networkData.pre_timestamp"
@@ -38,7 +39,8 @@ export default {
     return {
       list: [], // 表格是数据源
       networkData: null, // 网络请求返回的结果
-      currentPage: '' // 当前请求页吗
+      currentPage: '', // 当前请求页吗
+      finished: false // 控制数据 加载结束（没有更多了 ）状态的显隐
     }
   },
   computed: {},
@@ -61,6 +63,8 @@ export default {
         with_top: '1' // 是否包含置顶文章
       })
       this.networkData = data.data
+      // 是否还有更多数据
+      this.finished = !this.networkData.pre_timestamp
       return this.networkData.results
     }
   }

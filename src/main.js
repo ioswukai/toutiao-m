@@ -12,7 +12,8 @@ import { handleRelativeTime } from './utils/dayjs'
 // vue2中，导入relativeTime 过滤器
 // import './utils/dayjs'
 import globalConfig from '@/globalConfig'
-
+// 解决`non-passive`警告
+import 'default-passive-events'
 const app = createApp(App)
 
 // 定义全局属性

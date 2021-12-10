@@ -3,6 +3,7 @@
     class="comment-list"
     ref="common-page-list"
     v-model="list"
+    :finished="finished"
     finishedText="已展示所有评论"
     overflowY="unset"
     :load-data-request="onLoad"
@@ -38,7 +39,8 @@ export default {
     return {
       list: [], // 表格是数据源
       networkData: null, // 网络请求返回的结果
-      offset: null // 获取下一页数据的标记
+      offset: null, // 获取下一页数据的标记
+      finished: false // 控制数据 加载结束（没有更多了 ）状态的显隐
     }
   },
   emits: {
@@ -76,6 +78,8 @@ export default {
         limit: 10 // 获取评论数据的个数，不传采用服务器设定的默认每页数据量
       })
       this.networkData = data.data
+      // 是否还有更多数据
+      this.finished = !this.networkData.last_id
       // 通知父组件，更新评论总数
       this.$emit('updateTotalCommentCount', this.networkData.total_count)
       return this.networkData.results
