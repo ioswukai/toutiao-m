@@ -80,7 +80,10 @@ export default {
   },
   created () {
     // 建立连接
-    const socket = io('http://ttapi.research.itcast.cn')
+    // const socket = io('http://ttapi.research.itcast.cn')
+    // 解决服务器跨域问题
+    const socket = io('/api/use')
+
     // data属性记录下 此实例
     this.socket = socket
 
@@ -107,6 +110,11 @@ export default {
   mounted () {
     // 一进入页面，就要滚动到最底部
     this.$refs['message-list'].scrollToBottom()
+  },
+  unmounted () {
+    // 手动断开IM连接
+    // this.socket.disconnect()
+    this.socket.close()
   },
   methods: {
     async onLoad () {
