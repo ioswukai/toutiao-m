@@ -82,7 +82,7 @@ export default {
     // 建立连接
     // const socket = io('http://ttapi.research.itcast.cn')
     // 解决服务器跨域问题
-    const socket = io('/api/use')
+    const socket = io()
 
     // data属性记录下 此实例
     this.socket = socket

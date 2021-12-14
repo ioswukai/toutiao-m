@@ -4,6 +4,8 @@
 export default {
   // 基础网址
   host: 'http://api-toutiao-web.itheima.net/',
+  // 解决服务器跨域问题
+  // host: '/api',
   /**
    * 动态路由，接收的路由参数，在组件props中的配置
    * 可能存在多种情况，所以写多种类型

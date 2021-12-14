@@ -8,14 +8,14 @@ module.exports = {
        */
       '/api': {
         // 这里后台的地址模拟的;应该填写你们真实的后台接口
-        target: 'http://ttapi.research.itcast.cn',
+        target: 'http://api-toutiao-web.itheima.net/',
         // 允许跨域
         changOrigin: true,
         /**
          * 重写路径，当我们在浏览器中看到请求的地址为：
          * api/core/getData/userInfo 时
          * 实际上访问的地址是：
-         * http://ttapi.research.itcast.cn/core/getData/userInfo,
+         * http://api-toutiao-web.itheima.net/core/getData/userInfo,
          * 因为重写了 /api
          */
         pathRewrite: {
@@ -25,6 +25,11 @@ module.exports = {
            */
           '^/api': ''
         }
+      },
+      '/socket.io': { // 解决IM跨域
+        target: 'http://ttapi.research.itcast.cn',
+        // 允许跨域
+        changOrigin: true
       }
     }
   }
