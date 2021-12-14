@@ -141,6 +141,8 @@ export default {
         // 4. 接收请求结果，后续处理
         // 向Vuex提交user的修改
         this.$store.commit('setUser', data.data)
+        // 清除layout的缓存，这些页面和用户的登录信息相关，让她重新渲染
+        this.$store.commit('removeCachePage', 'LayoutIndex')
         this.$toast.success('登录成功')
         // 登录成功后，跳转原来的页面
         // back不严谨，后期会优化

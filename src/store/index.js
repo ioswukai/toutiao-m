@@ -9,7 +9,10 @@ export default createStore({
     // 本地存储操作，封装进storage类中
     // user: JSON.parse(window.localStorage.getItem(TOKEN_KEY))
     user: getItem(ConstKey.storageKey.user),
-    searchHistorys: getItem(ConstKey.storageKey.searchHistorys) || []
+    // 搜索历史列表
+    searchHistorys: getItem(ConstKey.storageKey.searchHistorys) || [],
+    // 缓存页面列表
+    cachePages: ['LayoutIndex']
   },
   // 修改数据，永远通过mutations修改数据，可响应式
   mutations: {
@@ -23,9 +26,24 @@ export default createStore({
       // window.localStorage.setItem(TOKEN_KEY, JSON.stringify(state.user))
       setItem(ConstKey.storageKey.user, state.user)
     },
+    // 设置搜索历史列表
     setSearchHistorys (state, data) {
       state.searchHistorys = data
       setItem(ConstKey.storageKey.searchHistorys, state.searchHistorys)
+    },
+    // 添加缓存页面
+    addCachePage (state, pageName) {
+      if (!state.cachePages.includes(pageName)) {
+        state.cachePages.push(pageName)
+      }
+    },
+    // 移除缓存页面
+    removeCachePage (state, pageName) {
+      const idx = state.cachePages.indexOf(pageName)
+
+      if (idx !== -1) {
+        state.cachePages.splice(idx, 1)
+      }
     }
   },
   actions: {

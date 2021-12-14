@@ -1,7 +1,16 @@
 <template>
   <div class="layout-container">
-    <!-- 路由的出口 -->
-    <router-view/>
+    <!-- 二级路由的出口 -->
+<!--    <router-view/>-->
+    <router-view v-slot="{ Component }">
+      <!-- 此处的keep-alive
+         1. 缓存所有二级路由（首页/问答/视频/我的）的组件状态
+       -->
+      <keep-alive>
+        <component :is="Component" :key="$route.path"  v-if="$route.meta.keepAlive"/>
+      </keep-alive>
+      <component :is="Component" :key="$route.path" v-if="!$route.meta.keepAlive"/>
+    </router-view>
     <!-- 标签栏
     route:开启路由
     to属性自动选中对应的标签
@@ -48,6 +57,8 @@ export default {
   created () {
   },
   mounted () {
+    // 在重新登录后，再次添加缓存
+    this.$store.commit('addCachePage', 'LayoutIndex')
   },
   methods: {}
 }

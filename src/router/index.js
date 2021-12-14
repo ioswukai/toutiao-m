@@ -9,26 +9,41 @@ const routes = [
   { // 父路由 底部标签栏
     path: '/', // 根页面
     // name: 'layout', // 如果父路由有默认子路由，无需设置name
+    meta: {
+      keepAlive: true // 设置页面是否需要使用缓存
+    },
     component: () => import('@/views/layout'),
     children: [ // 子路由
       { // 登录
         name: 'home',
         path: '', // 默认子路由，只能有1个
+        meta: {
+          keepAlive: true // 设置页面是否需要使用缓存
+        },
         component: () => import('@/views/home')
       },
       { // 问答
         name: 'qa',
         path: '/qa', // 默认子路由
+        meta: {
+          keepAlive: true // 设置页面是否需要使用缓存
+        },
         component: () => import('@/views/qa')
       },
       { // 视频
         name: 'video',
         path: '/video', // 默认子路由
+        meta: {
+          keepAlive: true // 设置页面是否需要使用缓存
+        },
         component: () => import('@/views/video')
       },
       { // 我的
         name: 'my',
         path: '/my', // 默认子路由
+        meta: {
+          keepAlive: true // 设置页面是否需要使用缓存
+        },
         component: () => import('@/views/my')
       }
     ]
