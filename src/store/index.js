@@ -44,6 +44,10 @@ export default createStore({
       if (idx !== -1) {
         state.cachePages.splice(idx, 1)
       }
+    },
+    // 移除所有缓存页面
+    removeAllCachePages (state) {
+      state.cachePages.length = 0
     }
   },
   actions: {

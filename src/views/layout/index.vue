@@ -6,11 +6,20 @@
       <!-- 此处的keep-alive
          1. 缓存所有二级路由（首页/问答/视频/我的）的组件状态
        -->
-      <keep-alive>
-        <component :is="Component" :key="$route.path"  v-if="$route.meta.keepAlive"/>
+<!--      <keep-alive>-->
+<!--        <component :is="Component" :key="$route.path"  v-if="$route.meta.keepAlive"/>-->
+<!--      </keep-alive>-->
+<!--      <component :is="Component" :key="$route.path" v-if="!$route.meta.keepAlive"/>-->
+      <!-- route.meta.keepAlive 控制组件的缓存不灵活
+             实现运行时动态控制组件的缓存/取消缓存比较麻烦
+             推荐使用：：`keep-alive`的`include`或`exclude`属性，
+                        传递元素为组件名（非路由名）的`vuex`容器数组，
+        -->
+      <keep-alive :include="cachePages">
+        <component :is="Component" :key="$route.path" />
       </keep-alive>
-      <component :is="Component" :key="$route.path" v-if="!$route.meta.keepAlive"/>
     </router-view>
+
     <!-- 标签栏
     route:开启路由
     to属性自动选中对应的标签
@@ -45,6 +54,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
   name: 'LayoutIndex',
   components: {},
@@ -52,7 +62,9 @@ export default {
   data () {
     return {}
   },
-  computed: {},
+  computed: {
+    ...mapState(['cachePages'])
+  },
   watch: {},
   created () {
   },

@@ -138,6 +138,8 @@ export default {
     this.loadUserChannels()
   },
   mounted () {
+    // 在重新登录后，再次添加缓存
+    this.$store.commit('addCachePage', 'HomeIndex')
   },
   methods: {
     async loadUserChannels () {
