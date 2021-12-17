@@ -115,6 +115,14 @@ export default {
   created () {
   },
   mounted () {},
+  activated () {
+    // 滚动到指定位置
+    // console.log('从缓存中被激活')
+  },
+  // 组件失去活动
+  deactivated () {
+    // console.log('组件失去活动')
+  },
   methods: {
     // 初始化或滚动到底部的时候，会触发 onLoad事件
     // 初次请求数据没有铺满整屏幕，则会触发多次

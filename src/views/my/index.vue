@@ -127,10 +127,7 @@ export default {
       this.loadUserInfo()
     }
   },
-  mounted () {
-    // 在重新登录后，再次添加缓存
-    this.$store.commit('addCachePage', 'MyIndex')
-  },
+  mounted () {},
   methods: {
     // Dialog 组件既可以在模板中使用
     // 也可以通过 JavaScript 来调用

@@ -18,21 +18,25 @@
              推荐使用：：`keep-alive`的`include`或`exclude`属性，
                         传递元素为组件名（非路由名）的`vuex`容器数组，
         -->
-      <keep-alive :include="cachePages">
-        <component :is="Component" :key="$route.path" />
+      <keep-alive :include="cachePage.getInclude(Component)">
+        <component :is="cachePage.getIs(Component)" :key="cachePage.getKey(Component)" />
       </keep-alive>
     </router-view>
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import cachePage from '@/utils/cachePage'
 
 export default {
   name: 'App',
-  computed: {
-    ...mapState(['cachePages'])
-  }
+  data () {
+    return {
+      cachePage: cachePage
+    }
+  },
+  computed: {},
+  methods: {}
 }
 </script>
 

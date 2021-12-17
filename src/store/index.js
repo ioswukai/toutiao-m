@@ -11,8 +11,8 @@ export default createStore({
     user: getItem(ConstKey.storageKey.user),
     // 搜索历史列表
     searchHistorys: getItem(ConstKey.storageKey.searchHistorys) || [],
-    // 缓存页面列表
-    cachePages: ['LayoutIndex']
+    // 缓存页面列表，程序运行时，动态控制
+    cachePages: []
   },
   // 修改数据，永远通过mutations修改数据，可响应式
   mutations: {
