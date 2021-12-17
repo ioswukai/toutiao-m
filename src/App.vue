@@ -26,6 +26,7 @@
 </template>
 
 <script>
+// 导入组件缓存管理类
 import cachePage from '@/utils/cachePage'
 
 export default {

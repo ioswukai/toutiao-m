@@ -4,6 +4,7 @@
     v-model="list"
     :finished="finished"
     :load-data-request="onLoad"
+    :scroll-to-pre-position-when-activated="true"
     @reset-current-page="currentPage=''"
     @increase-current-page="currentPage=networkData.pre_timestamp"
     class="common-page-list" >

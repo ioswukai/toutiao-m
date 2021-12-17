@@ -34,6 +34,8 @@
 </template>
 
 <script>
+import { debounce } from 'lodash'
+
 export default {
   name: 'CommonPageList',
   components: {},
@@ -85,6 +87,13 @@ export default {
     overflowY: {
       type: String,
       default: 'auto'
+    },
+    /**
+     * 当组件被缓存时，激活后需滚动到之前位置
+     */
+    scrollToPrePositionWhenActivated: {
+      type: Boolean,
+      default: false
     }
   },
   emits: {
@@ -107,21 +116,36 @@ export default {
       loading: true, // 控制 加载中 loading状态的显隐
       error: false, // 控制列表 加载失败 的提示状态的显隐
       isRefreshLoading: false, // 控制 下拉刷新的loading 状态的显隐
-      refreshSuccessText: '刷新成功' // 下拉刷新成功提示文本，先写个默认值，防止什么都没写
+      refreshSuccessText: '刷新成功', // 下拉刷新成功提示文本，先写个默认值，防止什么都没写
+      scrollTop: 0 // 组件失活时，滚动的偏移量
     }
   },
   computed: {},
   watch: {},
   created () {
   },
-  mounted () {},
-  activated () {
-    // 滚动到指定位置
-    // console.log('从缓存中被激活')
+  mounted () {
+    if (this.scrollToPrePositionWhenActivated) {
+      const list = this.$refs['list-container']
+      // 监听列表的滚动
+      list.onscroll = debounce(() => {
+        // 记录滚动位置
+        this.scrollTop = list.scrollTop
+      }, 100)
+    }
   },
-  // 组件失去活动
+  activated () {
+    if (this.scrollToPrePositionWhenActivated) {
+      this.$nextTick(() => {
+        const list = this.$refs['list-container']
+        // 恢复滚动位置
+        list.scrollTop = this.scrollTop
+      })
+    }
+    // console.log('从缓存中被激活，scrollTop =', this.scrollTop)
+  },
   deactivated () {
-    // console.log('组件失去活动')
+    // console.log('组件失去活动，scrollTop =', this.scrollTop)
   },
   methods: {
     // 初始化或滚动到底部的时候，会触发 onLoad事件
