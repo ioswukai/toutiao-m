@@ -110,25 +110,27 @@ router.beforeEach((to, from, next) => {
     // 校验登录状态
     if (store.state.user) {
       // 已登录, 则执行路由
-      next()
-    } else {
-      // 未登录，则提示用户
-      Dialog.confirm({
-        title: '访问提示',
-        message: '该功能需要登录才能访问，确认登录吗'
-      }).then(() => {
-        // 确认时, 跳转登录页
-        router.replace({
-          name: 'login',
-          query: {
-            redirect: router.currentRoute.value.fullPath
-          }
-        })
-      }).catch(() => {
-        // 取消时，停止路由导航
-        next(false)
-      })
+      // next()
+      // 这里调用return，让代码不往下执行，否则还要加增加else嵌套，不方便阅读
+      return next()
     }
+
+    // 未登录，则提示用户
+    Dialog.confirm({
+      title: '访问提示',
+      message: '该功能需要登录才能访问，确认登录吗'
+    }).then(() => {
+      // 确认时, 跳转登录页
+      router.replace({
+        name: 'login',
+        query: {
+          redirect: router.currentRoute.value.fullPath
+        }
+      })
+    }).catch(() => {
+      // 取消时，停止路由导航
+      next(false)
+    })
   } else {
     // 不需要登录的页面，直接放行过去
     next()
