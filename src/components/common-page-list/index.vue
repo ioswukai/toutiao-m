@@ -165,7 +165,7 @@ export default {
         // 2. 判断数据
         if (this.finished === false) {
           // 之前的数据源
-          var list = this.modelValue
+          const list = this.modelValue
 
           if (isRefreshAction) {
             // 下拉刷新操作
