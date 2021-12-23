@@ -238,13 +238,17 @@ export default {
       width: 31px;
       height: 6px;
       background-color: #3296fa;
-      // 这样设置，底边指示条，会消失
-      // 因为父元素，有个底边的padding
-      bottom: 8px
+      // 底边指示条，距离底部有8px的间距
+      // 因为父元素，有个底边的30px的padding 30+8=38
+      bottom: 38px
     }
     .van-tabs__nav {
       // 去掉父元素的底padding
-      padding-bottom: 0;
+      // 这里去掉不合适，因为这会导致滚动条的显示
+      //padding-bottom: 0;
+      // 此行代码 修复设置min-width: 200px后，
+      // 当tab数量<=5个时，iOS 无法左右滑动的bug，
+      overflow-y: auto;
     }
     .hamburger-btn {
       position: fixed;
@@ -282,4 +286,5 @@ export default {
     }
   }
 }
+
 </style>
